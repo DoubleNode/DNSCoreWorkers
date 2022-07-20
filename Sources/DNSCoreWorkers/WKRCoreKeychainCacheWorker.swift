@@ -3,7 +3,7 @@
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
-//  Copyright © 2020 - 2016 DoubleNode.com. All rights reserved.
+//  Copyright © 2022 - 2016 DoubleNode.com. All rights reserved.
 //
 
 import Combine
@@ -24,8 +24,8 @@ open class WKRKeychainCacheWorker: WKRBlankCacheWorker {
     // MARK: - Internal Work Methods
     override open func intDoDeleteObject(for id: String,
                                          with progress: DNSPTCLProgressBlock?,
-                                         then resultBlock: DNSPTCLResultBlock?) -> AnyPublisher<Bool, Error> {
-        let future = Future<Bool, Error> { [weak self] promise in
+                                         then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubBool {
+        let future = Future<WKRPTCLCacheRtnBool, Error> { [weak self] promise in
             do {
                 try self?.myValet.removeObject(forKey: id)
                 promise(.success(true))
@@ -46,8 +46,8 @@ open class WKRKeychainCacheWorker: WKRBlankCacheWorker {
     }
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
-                                       then resultBlock: DNSPTCLResultBlock?) -> AnyPublisher<Any, Error> {
-        let future = Future<Any, Error> { [weak self] promise in
+                                       then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
+        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     promise(.success(try self?.myValet.object(forKey: id) as Any))
@@ -72,8 +72,8 @@ open class WKRKeychainCacheWorker: WKRBlankCacheWorker {
     }
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
-                                       then resultBlock: DNSPTCLResultBlock?) -> AnyPublisher<String, Error> {
-        let future = Future<String, Error> { [weak self] promise in
+                                       then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubString {
+        let future = Future<WKRPTCLCacheRtnString, Error> { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     promise(.success(try self?.myValet.string(forKey: id) ?? ""))
@@ -99,8 +99,8 @@ open class WKRKeychainCacheWorker: WKRBlankCacheWorker {
     override open func intDoUpdate(object: Any,
                                    for id: String,
                                    with progress: DNSPTCLProgressBlock?,
-                                   then resultBlock: DNSPTCLResultBlock?) -> AnyPublisher<Any, Error> {
-        let future = Future<Any, Error> { [weak self] promise in
+                                   then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
+        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
             do {
                 if object as? String != nil {
                     // swiftlint:disable:next force_cast

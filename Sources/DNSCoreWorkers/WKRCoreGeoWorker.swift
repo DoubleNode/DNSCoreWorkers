@@ -1,9 +1,9 @@
 //
-//  WKRCoreGeolocationWorker.swift
+//  WKRCoreGeoWorker.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
-//  Copyright © 2020 - 2016 DoubleNode.com. All rights reserved.
+//  Copyright © 2022 - 2016 DoubleNode.com. All rights reserved.
 //
 
 import CoreLocation
@@ -17,19 +17,19 @@ import DNSProtocols
 import Geodesy
 import UIKit
 
-open class WKRCoreGeolocationWorker: WKRBlankGeolocationWorker, CLLocationManagerDelegate {
+open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
-    var block: WKRPTCLGeolocationBlockString?
+    var block: WKRPTCLGeoBlkString?
 
     // MARK: - Internal Work Methods
     override open func intDoLocate(with progress: DNSPTCLProgressBlock?,
-                                   and block: WKRPTCLGeolocationBlockString?,
+                                   and block: WKRPTCLGeoBlkString?,
                                    then resultBlock: DNSPTCLResultBlock?) throws {
         self.block = block
 
         if DNSAppGlobals.isRunningTest {
-            let dnsError = DNSError.Geolocation
+            let dnsError = DNSError.Geo
                 .denied(DNSCodeLocation.coreWorkers(self, "\(#file),\(#line),\(#function)"))
             block?(Result.failure(dnsError))
             _ = resultBlock?(.error)
@@ -43,7 +43,7 @@ open class WKRCoreGeolocationWorker: WKRBlankGeolocationWorker, CLLocationManage
                 authorizationStatus = CLLocationManager.authorizationStatus()
             }
             if authorizationStatus == .denied {
-                let dnsError = DNSError.Geolocation
+                let dnsError = DNSError.Geo
                     .denied(DNSCodeLocation.coreWorkers(self, "\(#file),\(#line),\(#function)"))
                 block?(Result.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -59,7 +59,7 @@ open class WKRCoreGeolocationWorker: WKRBlankGeolocationWorker, CLLocationManage
     // MARK: - CLLocationManagerDelegate methods
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
-        let dnsError = DNSError.Geolocation
+        let dnsError = DNSError.Geo
             .failure(error: error,
                      DNSCodeLocation.coreWorkers(self, "\(#file),\(#line),\(#function)"))
         block?(Result.failure(dnsError))

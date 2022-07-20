@@ -3,7 +3,7 @@
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
-//  Copyright © 2020 - 2016 DoubleNode.com. All rights reserved.
+//  Copyright © 2022 - 2016 DoubleNode.com. All rights reserved.
 //
 
 import CoreLocation
@@ -18,7 +18,7 @@ import UIKit
 open class WKRCoreBeaconsWorker: WKRBlankBeaconsWorker, CLLocationManagerDelegate {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
-    var block: WKRPTCLGeolocationBlockString?
+    var block: WKRPTCLGeoBlkString?
 
     // MARK: - UIWindowSceneDelegate methods
     // Called when the scene has moved from an inactive state to an active state.
