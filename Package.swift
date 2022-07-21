@@ -31,7 +31,7 @@ let package = Package(
         .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.8.0"),
         .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.9.4"),
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.8.0"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.14"),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.15"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/Square/Valet", from: "4.1.2"),
     ],
