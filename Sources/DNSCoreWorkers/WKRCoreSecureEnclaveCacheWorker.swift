@@ -1,5 +1,5 @@
 //
-//  WKRSecureEnclaveCacheWorker.swift
+//  WKRCoreSecureEnclaveCacheWorker.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -14,7 +14,7 @@ import DNSProtocols
 import Foundation
 import Valet
 
-open class WKRSecureEnclaveCacheWorker: WKRKeychainCacheWorker {
+open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     public enum C {
         static let requirePromptOnNextAccess = "requirePromptOnNextAccess"
     }
@@ -33,7 +33,7 @@ open class WKRSecureEnclaveCacheWorker: WKRKeychainCacheWorker {
 
     override open func enableOption(_ option: String) {
         super.enableOption(option)
-        if option == WKRSecureEnclaveCacheWorker.C.requirePromptOnNextAccess {
+        if option == C.requirePromptOnNextAccess {
             myValet.requirePromptOnNextAccess()
         }
         nextWorker?.enableOption(option)

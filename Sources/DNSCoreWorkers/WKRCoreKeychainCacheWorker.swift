@@ -1,5 +1,5 @@
 //
-//  WKRKeychainCacheWorker.swift
+//  WKRCoreKeychainCacheWorker.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -14,9 +14,12 @@ import DNSProtocols
 import Foundation
 import Valet
 
-open class WKRKeychainCacheWorker: WKRBlankCacheWorker {
+open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
+    public enum C {
+        static let valetId = "WKRCoreKeychainCacheWorker"
+    }
     private lazy var myValet: Valet = {
-        let valet = Valet.valet(with: Identifier(nonEmpty: "WKRKeychainCacheWorker")!,
+        let valet = Valet.valet(with: Identifier(nonEmpty: C.valetId)!,
                                 accessibility: .whenUnlocked)
         return valet
     }()
