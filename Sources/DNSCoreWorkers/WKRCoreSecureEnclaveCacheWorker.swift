@@ -16,11 +16,11 @@ import Valet
 
 open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     public enum C {
-        static let requirePromptOnNextAccess = "requirePromptOnNextAccess"
+        public static let requirePromptOnNextAccess = "requirePromptOnNextAccess"
     }
     public enum Localizations {
-        enum Biometric {
-            static let prompt = NSLocalizedString("COREWORKERS-BiometricPrompt", comment: "COREWORKERS-BiometricPrompt")
+        public enum Biometric {
+            public static let prompt = NSLocalizedString("COREWORKERS-BiometricPrompt", comment: "COREWORKERS-BiometricPrompt")
         }
     }
 

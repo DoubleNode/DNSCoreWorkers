@@ -16,7 +16,7 @@ import Valet
 
 open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
     public enum C {
-        static let valetId = "WKRCoreKeychainCacheWorker"
+        public static let valetId = "WKRCoreKeychainCacheWorker"
     }
     private lazy var myValet: Valet = {
         let valet = Valet.valet(with: Identifier(nonEmpty: C.valetId)!,
