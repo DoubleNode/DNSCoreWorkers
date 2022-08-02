@@ -28,10 +28,10 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
     override open func intDoDeleteObject(for id: String,
                                          with progress: DNSPTCLProgressBlock?,
                                          then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubVoid {
-        let future = Future<WKRPTCLCacheRtnVoid, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutVoid { [weak self] promise in
             do {
                 try self?.myValet.removeObject(forKey: id)
-                promise(.success(()))
+                promise(.success)
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
@@ -50,7 +50,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
-        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     promise(.success(try self?.myValet.object(forKey: id) as Any))
@@ -76,7 +76,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubString {
-        let future = Future<WKRPTCLCacheRtnString, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutString { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     promise(.success(try self?.myValet.string(forKey: id) ?? ""))
@@ -103,7 +103,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
                                    for id: String,
                                    with progress: DNSPTCLProgressBlock?,
                                    then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
-        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if object as? String != nil {
                     // swiftlint:disable:next force_cast

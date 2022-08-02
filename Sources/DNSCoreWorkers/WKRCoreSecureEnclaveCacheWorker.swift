@@ -43,10 +43,10 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     override open func intDoDeleteObject(for id: String,
                                          with progress: DNSPTCLProgressBlock?,
                                          then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubVoid {
-        let future = Future<WKRPTCLCacheRtnVoid, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutVoid { [weak self] promise in
             do {
                 try self?.myValet.removeObject(forKey: id)
-                promise(.success(()))
+                promise(.success)
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
@@ -65,7 +65,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
-        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     let prompt = Self.Localizations.Biometric.prompt
@@ -93,7 +93,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     override open func intDoReadObject(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubString {
-        let future = Future<WKRPTCLCacheRtnString, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutString { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
                     let prompt = Self.Localizations.Biometric.prompt
@@ -122,7 +122,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
                                    for id: String,
                                    with progress: DNSPTCLProgressBlock?,
                                    then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
-        let future = Future<WKRPTCLCacheRtnAny, Error> { [weak self] promise in
+        let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if object as? String != nil {
                     // swiftlint:disable:next force_cast
