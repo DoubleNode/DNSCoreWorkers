@@ -42,11 +42,11 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
     // MARK: - Internal Work Methods
     override open func intDoDeleteObject(for id: String,
                                          with progress: DNSPTCLProgressBlock?,
-                                         then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubBool {
-        let future = Future<WKRPTCLCacheRtnBool, Error> { [weak self] promise in
+                                         then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubVoid {
+        let future = Future<WKRPTCLCacheRtnVoid, Error> { [weak self] promise in
             do {
                 try self?.myValet.removeObject(forKey: id)
-                promise(.success(true))
+                promise(.success(()))
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
@@ -59,7 +59,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
         }
         guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return Publishers.Zip(future, nextWorker.doDeleteObject(for: id, with: progress))
-            .map { $0 && $1 }
+            .map { _, _ in () }
             .eraseToAnyPublisher()
     }
     override open func intDoReadObject(for id: String,
