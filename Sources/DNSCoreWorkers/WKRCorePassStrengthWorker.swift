@@ -1,5 +1,5 @@
 //
-//  WKRCorePasswordStrengthWorker.swift
+//  WKRCorePassStrengthWorker.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -10,7 +10,7 @@ import DNSBlankWorkers
 import DNSProtocols
 import Foundation
 
-open class WKRCorePasswordStrengthWorker: WKRBlankPasswordStrengthWorker {
+open class WKRCorePasswordStrengthWorker: WKRBlankPassStrengthWorker {
     public var minimunLength = 8
     
     let regexOneUppercase = "^(?=.*[A-Z]).*$"
@@ -19,8 +19,8 @@ open class WKRCorePasswordStrengthWorker: WKRBlankPasswordStrengthWorker {
     let regexOneSymbol = "^(?=.*[!@#$%&_]).*$"
 
     // MARK: - Internal Work Methods
-    override open func intDoCheckPasswordStrength(for password: String,
-                                                  then resultBlock: DNSPTCLResultBlock?) throws -> WKRPTCLPasswordStrength.Level {
+    override open func intDoCheckPassStrength(for password: String,
+                                              then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLPassStrengthResVoid {
         let len = password.count
         var strength = 0
         
@@ -36,9 +36,9 @@ open class WKRCorePasswordStrengthWorker: WKRBlankPasswordStrengthWorker {
         _ = resultBlock?(.completed)
 
         switch strength {
-        case ..<4: return .weak
-        case 4..<6: return .moderate
-        default: return .strong
+        case ..<4: return .success(.weak)
+        case 4..<6: return .success(.moderate)
+        default: return .success(.strong)
         }
     }
     

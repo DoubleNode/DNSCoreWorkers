@@ -25,7 +25,7 @@ open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
     // MARK: - Internal Work Methods
     override open func intDoLocate(with progress: DNSPTCLProgressBlock?,
                                    and block: WKRPTCLGeoBlkString?,
-                                   then resultBlock: DNSPTCLResultBlock?) throws {
+                                   then resultBlock: DNSPTCLResultBlock?) {
         self.block = block
 
         if DNSAppGlobals.isRunningTest {

@@ -16,21 +16,21 @@ open class WKRCoreAppReviewWorker: WKRBlankAppReviewWorker {
     public var windowScene: UIWindowScene?
 
     // MARK: - Internal Work Methods
-    override open func intDoReview(then resultBlock: DNSPTCLResultBlock?) throws -> Bool {
+    override open func intDoReview(then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLAppReviewResVoid {
         guard utilityShouldRequestReview() else {
             _ = resultBlock?(.completed)
-            return false
+            return .success
         }
         if self.windowScene != nil {
             if #available(iOS 14.0, *) {
                 SKStoreReviewController.requestReview(in: self.windowScene!)
                 _ = resultBlock?(.completed)
-                return true
+                return .success
             }
         }
         SKStoreReviewController.requestReview()
         _ = resultBlock?(.completed)
-        return true
+        return .success
     }
 
     // MARK: - Utility methods -
