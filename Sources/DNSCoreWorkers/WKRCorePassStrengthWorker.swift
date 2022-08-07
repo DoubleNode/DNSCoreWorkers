@@ -10,7 +10,7 @@ import DNSBlankWorkers
 import DNSProtocols
 import Foundation
 
-open class WKRCorePasswordStrengthWorker: WKRBlankPassStrengthWorker {
+open class WKRCorePassStrengthWorker: WKRBlankPassStrengthWorker {
     public var minimunLength = 8
     
     let regexOneUppercase = "^(?=.*[A-Z]).*$"
