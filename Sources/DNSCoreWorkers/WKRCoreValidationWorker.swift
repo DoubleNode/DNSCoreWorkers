@@ -14,7 +14,7 @@ import DNSProtocols
 import Foundation
 
 open class WKRCoreValidationWorker: WKRBlankValidationWorker {
-    public var passStrengthWorker: WKRPTCLPassStrength = WKRCrashPassStrengthWorker()
+    public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrengthWorker()
 
     // MARK: - Internal Work Methods
     override open func intDoValidateBirthdate(for birthdate: Date?,
@@ -188,7 +188,7 @@ open class WKRCoreValidationWorker: WKRBlankValidationWorker {
                 .tooLong(fieldName: config.fieldName,
                          DNSCodeLocation.coreWorkers(self, "\(#file),\(#line),\(#function)")))
         }
-        let result = self.passStrengthWorker.doCheckPassStrength(for: password)
+        let result = self.wkrPassStrength.doCheckPassStrength(for: password)
         if case .failure(let error) = result {
             return .failure(error)
         }
