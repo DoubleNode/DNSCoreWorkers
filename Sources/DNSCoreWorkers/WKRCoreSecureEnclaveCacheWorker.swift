@@ -50,8 +50,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .deleteError(error: error,
-                                 DNSCodeLocation.coreWorkers(self!, "\(#file),\(#line),\(#function)"))
+                    .deleteError(error: error, DNSCodeLocation.coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -76,8 +75,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error,
-                               DNSCodeLocation.coreWorkers(self!, "\(#file),\(#line),\(#function)"))
+                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -104,8 +102,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error,
-                               DNSCodeLocation.coreWorkers(self!, "\(#file),\(#line),\(#function)"))
+                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -137,8 +134,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error,
-                               DNSCodeLocation.coreWorkers(self!, "\(#file),\(#line),\(#function)"))
+                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
