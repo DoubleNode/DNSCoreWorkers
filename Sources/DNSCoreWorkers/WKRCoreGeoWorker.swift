@@ -29,7 +29,7 @@ open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
         self.block = block
 
         if DNSAppGlobals.isRunningTest {
-            let dnsError = DNSError.Geo.denied(DNSCodeLocation.coreWorkers(self))
+            let dnsError = DNSError.Geo.denied(.coreWorkers(self))
             block?(Result.failure(dnsError))
             _ = resultBlock?(.error)
             return
@@ -42,7 +42,7 @@ open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
                 authorizationStatus = CLLocationManager.authorizationStatus()
             }
             if authorizationStatus == .denied {
-                let dnsError = DNSError.Geo.denied(DNSCodeLocation.coreWorkers(self))
+                let dnsError = DNSError.Geo.denied(.coreWorkers(self))
                 block?(Result.failure(dnsError))
                 _ = resultBlock?(.error)
                 return
@@ -57,7 +57,7 @@ open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
     // MARK: - CLLocationManagerDelegate methods
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
-        let dnsError = DNSError.Geo.failure(error: error, DNSCodeLocation.coreWorkers(self))
+        let dnsError = DNSError.Geo.failure(error: error, .coreWorkers(self))
         block?(Result.failure(dnsError))
         dnsLog.error(dnsError)
     }

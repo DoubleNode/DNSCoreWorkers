@@ -35,7 +35,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .deleteError(error: error, DNSCodeLocation.coreWorkers(self!))
+                    .deleteError(error: error, .coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -58,7 +58,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
+                    .readError(error: error, .coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -83,7 +83,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
+                    .readError(error: error, .coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
@@ -115,7 +115,7 @@ open class WKRCoreKeychainCacheWorker: WKRBlankCacheWorker {
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
-                    .readError(error: error, DNSCodeLocation.coreWorkers(self!))
+                    .readError(error: error, .coreWorkers(self!))
                 DNSCore.reportError(dnsError)
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
