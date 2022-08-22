@@ -1,5 +1,5 @@
 //
-//  WKRCoreValidationWorker.swift
+//  WKRCoreValidation.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -13,8 +13,8 @@ import DNSError
 import DNSProtocols
 import Foundation
 
-open class WKRCoreValidationWorker: WKRBlankValidationWorker {
-    public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrengthWorker()
+open class WKRCoreValidation: WKRBlankValidation {
+    public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrength()
 
     // MARK: - Internal Work Methods
     override open func intDoValidateBirthdate(for birthdate: Date?,

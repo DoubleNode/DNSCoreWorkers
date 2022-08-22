@@ -1,5 +1,5 @@
 //
-//  WKRCoreSecureEnclaveCacheWorker.swift
+//  WKRCoreKeychainCache.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -14,30 +14,15 @@ import DNSProtocols
 import Foundation
 import Valet
 
-open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
+open class WKRCoreKeychainCache: WKRBlankCache {
     public enum C {
-        public static let requirePromptOnNextAccess = "requirePromptOnNextAccess"
+        public static let valetId = "WKRCoreKeychainCache"
     }
-    public enum Localizations {
-        public enum Biometric {
-            public static let prompt = NSLocalizedString("COREWORKERS-BiometricPrompt", comment: "COREWORKERS-BiometricPrompt")
-        }
-    }
-
-    private lazy var myValet: SinglePromptSecureEnclaveValet = {
-        let valet = SinglePromptSecureEnclaveValet
-            .valet(with: Identifier(nonEmpty: DNSAppConstants.Biometrics.valet)!,
-                   accessControl: .userPresence)
+    private lazy var myValet: Valet = {
+        let valet = Valet.valet(with: Identifier(nonEmpty: C.valetId)!,
+                                accessibility: .whenUnlocked)
         return valet
     }()
-
-    override open func enableOption(_ option: String) {
-        super.enableOption(option)
-        if option == C.requirePromptOnNextAccess {
-            myValet.requirePromptOnNextAccess()
-        }
-        nextWorker?.enableOption(option)
-    }
 
     // MARK: - Internal Work Methods
     override open func intDoDeleteObject(for id: String,
@@ -67,9 +52,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
         let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
-                    let prompt = Self.Localizations.Biometric.prompt
-                    promise(.success(try self?.myValet.object(forKey: id,
-                                                              withPrompt: prompt) as Any))
+                    promise(.success(try self?.myValet.object(forKey: id) as Any))
                 }
                 promise(.success(Data() as Any))
                 _ = resultBlock?(.completed)
@@ -94,9 +77,7 @@ open class WKRCoreSecureEnclaveCacheWorker: WKRCoreKeychainCacheWorker {
         let future = WKRPTCLCacheFutString { [weak self] promise in
             do {
                 if try self?.myValet.containsObject(forKey: id) ?? false {
-                    let prompt = Self.Localizations.Biometric.prompt
-                    promise(.success(try self?.myValet.string(forKey: id,
-                                                              withPrompt: prompt) ?? ""))
+                    promise(.success(try self?.myValet.string(forKey: id) ?? ""))
                 }
                 promise(.success(""))
                 _ = resultBlock?(.completed)

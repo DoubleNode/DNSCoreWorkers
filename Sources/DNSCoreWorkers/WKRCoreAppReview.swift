@@ -1,5 +1,5 @@
 //
-//  WKRCoreAppReviewWorker.swift
+//  WKRCoreAppReview.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -12,7 +12,7 @@ import DNSCore
 import DNSProtocols
 import StoreKit
 
-open class WKRCoreAppReviewWorker: WKRBlankAppReviewWorker {
+open class WKRCoreAppReview: WKRBlankAppReview {
     public var windowScene: UIWindowScene?
 
     // MARK: - Internal Work Methods

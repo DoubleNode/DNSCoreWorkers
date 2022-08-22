@@ -1,5 +1,5 @@
 //
-//  WKRCoreGeoWorker.swift
+//  WKRCoreGeo.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -17,7 +17,7 @@ import DNSProtocols
 import Geodesy
 import UIKit
 
-open class WKRCoreGeoWorker: WKRBlankGeoWorker, CLLocationManagerDelegate {
+open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
     var block: WKRPTCLGeoBlkString?

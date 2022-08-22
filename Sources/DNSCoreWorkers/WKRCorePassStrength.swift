@@ -1,5 +1,5 @@
 //
-//  WKRCorePassStrengthWorker.swift
+//  WKRCorePassStrength.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreWorkers
 //
 //  Created by Darren Ehlers.
@@ -10,7 +10,7 @@ import DNSBlankWorkers
 import DNSProtocols
 import Foundation
 
-open class WKRCorePassStrengthWorker: WKRBlankPassStrengthWorker {
+open class WKRCorePassStrength: WKRBlankPassStrength {
     public var minimunLength = 8
     
     let regexOneUppercase = "^(?=.*[A-Z]).*$"
