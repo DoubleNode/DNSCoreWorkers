@@ -29,10 +29,27 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         var resultBlock: DNSPTCLResultBlock?
     }
 
-    static let pauseDeniedRetryMax = 10
-    static let pauseDeniedRetryMemoryMax = 12
-    static let pauseSkippedRetryMax = 3
-    static let pauseSkippedRetryMemoryMax = 5
+    public static let pauseDeniedRetryMax = 10
+    public static let pauseDeniedRetryMemoryMax = 12
+    public static let pauseSkippedRetryMax = 3
+    public static let pauseSkippedRetryMemoryMax = 5
+
+    public static var colors: SPPermissionsColorProtocol {
+        set {
+            SPPermissions.color = newValue
+        }
+        get {
+            SPPermissions.color
+        }
+    }
+    public static var strings: SPPermissionsTextProtocol {
+        set {
+            SPPermissions.text = newValue
+        }
+        get {
+            SPPermissions.text
+        }
+    }
 
     enum Permissions {
         static let calendar = "WKRCorePermissions_Permissions_Calendar"
@@ -57,8 +74,8 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
 
     override open func configure() {
         super.configure()
-        SPPermissions.color = WKRCorePermissionsColors()
-        SPPermissions.text = WKRCorePermissionsStrings()
+        Self.colors = WKRCorePermissionsColors()
+        Self.strings = WKRCorePermissionsStrings()
     }
 
     var nativeMode = true
@@ -352,10 +369,10 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         }
         var retval = memorySettings[permissionString] ?? .unknown
         let pauseCount = memoryPauseSettings[permissionPauseString] ?? 0
-        if (pauseCount >= WKRCorePermissions.pauseSkippedRetryMemoryMax) && (retval == .skipped) {
+        if (pauseCount >= Self.pauseSkippedRetryMemoryMax) && (retval == .skipped) {
             retval = .unknown
             memoryPauseSettings[permissionPauseString] = 0
-        } else  if (pauseCount >= WKRCorePermissions.pauseDeniedRetryMemoryMax) && (retval == .denied) {
+        } else  if (pauseCount >= Self.pauseDeniedRetryMemoryMax) && (retval == .denied) {
             retval = .unknown
             memoryPauseSettings[permissionPauseString] = 0
         } else {
@@ -485,11 +502,11 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
                                               withDefault: defaultAction) as? String ?? "")
         let pauseCount = DNSCore.setting(for: permissionPauseString,
                                          withDefault: 0) as? Int ?? 0
-        if (pauseCount >= WKRCorePermissions.pauseSkippedRetryMax) && (retval == .skipped) {
+        if (pauseCount >= Self.pauseSkippedRetryMax) && (retval == .skipped) {
             retval = .unknown
             DNSCore.setting(set: permissionPauseString,
                             with: 0)
-        } else if (pauseCount >= WKRCorePermissions.pauseDeniedRetryMax) && (retval == .denied) {
+        } else if (pauseCount >= Self.pauseDeniedRetryMax) && (retval == .denied) {
             retval = .unknown
             DNSCore.setting(set: permissionPauseString,
                             with: 0)
