@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 //
 //  Package.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreValidationWorker
@@ -26,13 +26,15 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.9.6"),
-        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.9.57"),
-        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.9.26"),
-        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.9.44"),
+        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.9.7"),
+        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.9.2"),
+        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.9.60"),
+        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.9.28"),
+        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.9.45"),
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.9.1"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.82"),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.83"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
+        .package(url: "https://github.com/DoubleNodeOpen/SPPermissions", from: "5.4.4"),
         .package(url: "https://github.com/Square/Valet", from: "4.1.2"),
     ],
     targets: [
@@ -41,8 +43,9 @@ let package = Package(
         .target(
             name: "DNSCoreWorkers",
             dependencies: [
-                "DNSAppCore", "DNSBlankWorkers", "DNSCore", "DNSCrashWorkers",
-                "DNSError", "DNSProtocols", "Geodesy", "Valet"
+                "DNSAppCore", "DNSBaseTheme", "DNSBlankWorkers", "DNSCore",
+                "DNSCrashWorkers", "DNSError", "DNSProtocols", "Geodesy",
+                "SPPermissions", "Valet"
             ]),
         .testTarget(
             name: "DNSCoreWorkersTests",
