@@ -13,11 +13,16 @@ import DNSCore
 import DNSCoreThreading
 import DNSError
 import DNSProtocols
-import SPPermissions
 import UIKit
 
+import PermissionsKit
+import CalendarPermission
+import CameraPermission
+import LocationWhenInUsePermission
+import NotificationPermission
+
 // swiftlint:disable:next type_body_length
-open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPPermissionsDelegate {
+open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, PermissionsDelegate {
     struct PermissionBlock {
         var permission: WKRPTCLPermissions.Data.System
         var block: WKRPTCLPermissionsBlkAction?
@@ -34,22 +39,22 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
     public static let pauseSkippedRetryMax = 3
     public static let pauseSkippedRetryMemoryMax = 5
 
-    public static var colors: SPPermissionsColorProtocol {
-        set {
-            SPPermissions.color = newValue
-        }
-        get {
-            SPPermissions.color
-        }
-    }
-    public static var strings: SPPermissionsTextProtocol {
-        set {
-            SPPermissions.text = newValue
-        }
-        get {
-            SPPermissions.text
-        }
-    }
+//    public static var colors: SPPermissionsColorProtocol {
+//        set {
+//            SPPermissions.color = newValue
+//        }
+//        get {
+//            SPPermissions.color
+//        }
+//    }
+//    public static var strings: SPPermissionsTextProtocol {
+//        set {
+//            SPPermissions.text = newValue
+//        }
+//        get {
+//            SPPermissions.text
+//        }
+//    }
 
     enum Permissions {
         static let calendar = "WKRCorePermissions_Permissions_Calendar"
@@ -74,8 +79,8 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
 
     override open func configure() {
         super.configure()
-        Self.colors = WKRCorePermissionsColors()
-        Self.strings = WKRCorePermissionsStrings()
+//        Self.colors = WKRCorePermissionsColors()
+//        Self.strings = WKRCorePermissionsStrings()
     }
 
     var nativeMode = true
@@ -106,20 +111,20 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
 
         let requestPermissions = self.utilityPermissionsList(startingWith: [self.utilityConvert(permission)])
         DNSUIThread.run {
-            let anyDenied = requestPermissions.contains { $0.isDenied }
+            let anyDenied = requestPermissions.contains { $0.denied }
             if self.nativeMode && !anyDenied {
-                let controller = SPPermissions.native(Array(requestPermissions))
+                let controller = PermissionsKit.native(Array(requestPermissions))
                 controller.delegate = self
                 controller.present(on: viewController)
                 return
             }
             if requestPermissions.count < 4 {
-                let controller = SPPermissions.dialog(Array(requestPermissions))
+                let controller = PermissionsKit.dialog(Array(requestPermissions))
                 controller.dataSource = self
                 controller.delegate = self
                 controller.present(on: viewController)
             } else {
-                let controller = SPPermissions.list(Array(requestPermissions))
+                let controller = PermissionsKit.list(Array(requestPermissions))
                 controller.dataSource = self
                 controller.delegate = self
                 controller.present(on: viewController)
@@ -131,44 +136,43 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
                                     with progress: DNSPTCLProgressBlock?,
                                     and block: WKRPTCLPermissionsBlkAAction?,
                                     then resultBlock: DNSPTCLResultBlock?) {
-        let spPermissions = permissions.map { self.utilityConvert($0) }
-        let spPermissionsNotAuth = spPermissions.filter { !$0.isAuthorized }
-        if spPermissionsNotAuth.isEmpty {
+        let pkPermissions = permissions.map { self.utilityConvert($0) }
+        let pkPermissionsNotAuth = pkPermissions.filter { !$0.authorized }
+        if pkPermissionsNotAuth.isEmpty {
             let retval = permissions.map { WKRPTCLPermissionAction($0, .allowed) }
             block?(.success(retval))
             _ = resultBlock?(.completed)
             return
         }
 
-        let permissionsBlock = PermissionsBlock(permissions: permissions, block: block, resultBlock: resultBlock)
-        self.permissionsBlocks.append(permissionsBlock)
+        let permissionsBlk = PermissionsBlock(permissions: permissions, block: block, resultBlock: resultBlock)
+        self.permissionsBlocks.append(permissionsBlk)
 
 //        let debugPermissions = permissions.map{ $0.rawValue }.joined(separator: "|")
 //        log.debug("***PERM-2*** \(desire.rawValue) \(debugPermissions)")
-        guard self.utilityShouldContinue(desire,
-                                         permissions) else { return }
+        guard self.utilityShouldContinue(desire, permissions) else { return }
         DNSCore.reportLog("doRequest(permissions:)")
         guard let viewController = UIApplication.shared.dnsVisibleViewController else { return }
         guard dialogAsking.isEmpty else { return }
         dialogAsking = permissions
         dialogDesire = desire
 
-        let requestPermissions = self.utilityPermissionsList(startingWith: spPermissions)
+        let requestPermissions = self.utilityPermissionsList(startingWith: pkPermissions)
         DNSUIThread.run {
-            let anyDenied = requestPermissions.contains { $0.isDenied }
+            let anyDenied = requestPermissions.contains { $0.denied }
             if self.nativeMode && !anyDenied {
-                let controller = SPPermissions.native(Array(requestPermissions))
+                let controller = PermissionsKit.native(Array(requestPermissions))
                 controller.delegate = self
                 controller.present(on: viewController)
                 return
             }
             if requestPermissions.count < 4 {
-                let controller = SPPermissions.dialog(Array(requestPermissions))
+                let controller = PermissionsKit.dialog(Array(requestPermissions))
                 controller.dataSource = self
                 controller.delegate = self
                 controller.present(on: viewController)
             } else {
-                let controller = SPPermissions.list(Array(requestPermissions))
+                let controller = PermissionsKit.list(Array(requestPermissions))
                 controller.dataSource = self
                 controller.delegate = self
                 controller.present(on: viewController)
@@ -196,27 +200,31 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
                                  with progress: DNSPTCLProgressBlock?,
                                  and block: WKRPTCLPermissionsBlkAction?,
                                  then resultBlock: DNSPTCLResultBlock?) {
-        if self.utilityConvert(permission).isAuthorized {
+        if self.utilityConvert(permission).authorized {
             block?(.success(WKRPTCLPermissionAction(permission, .allowed)))
             _ = resultBlock?(.completed)
             return
         }
 
-        let permissionBlock = PermissionBlock(permission: permission, block: block, resultBlock: resultBlock)
-        self.permissionBlocks.append(permissionBlock)
+        let permissionBlk = PermissionBlock(permission: permission, block: block, resultBlock: resultBlock)
+        self.permissionBlocks.append(permissionBlk)
     }
 
-    // MARK: - SPPermissionsDataSource -
-    public func configure(_ cell: SPPermissionTableViewCell,
-                          for permission: SPPermission) -> SPPermissionTableViewCell {
-        cell.button.centerYAnchor.constraint(equalTo: cell.permissionTitleLabel.layoutMarginsGuide.centerYAnchor).isActive = true
-        cell.permissionDescriptionLabel.topAnchor.constraint(equalTo: cell.button.bottomAnchor, constant: 8).isActive = true
-        cell.permissionDescriptionLabel.trailingAnchor.constraint(equalTo: cell.button.trailingAnchor).isActive = true
-        return cell
+    // MARK: - PermissionsDataSource -
+    public func configure(_ cell: PermissionTableViewCell,
+                          for permission: Permission) {
+        cell.permissionButton.centerYAnchor.constraint(equalTo: cell.permissionTitleLabel.layoutMarginsGuide.centerYAnchor).isActive = true
+        cell.permissionDescriptionLabel.topAnchor.constraint(equalTo: cell.permissionButton.bottomAnchor, constant: 8).isActive = true
+        cell.permissionDescriptionLabel.trailingAnchor.constraint(equalTo: cell.permissionButton.trailingAnchor).isActive = true
+    }
+    
+    public func deniedPermissionAlertTexts(for permission: Permission) -> DeniedPermissionAlertTexts? {
+//        log.debug("*** PERMISSIONS : deniedData *** (\(permission.name))")
+        return nil  // DeniedPermissionAlertTexts()
     }
 
-    // MARK: - SPPermissionsDelegate -
-    public func didAllow(permission: SPPermission) {
+    // MARK: - PermissionsDelegate -
+    public func didAllow(permission: Permission) {
 //        log.debug("*** PERMISSIONS : didAllow *** (\(permission.name))")
         self.utilityUpdateContinue(WKRPTCLPermissions.Data.Action.allowed,
                                    for: permission)
@@ -226,7 +234,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
             self.didHide(permissions: [])
         }
     }
-    public func didDenied(permission: SPPermission) {
+    public func didDenied(permission: Permission) {
 //        log.debug("*** PERMISSIONS : didDenied *** (\(permission.name))")
         self.utilityUpdateContinue(WKRPTCLPermissions.Data.Action.denied,
                                    for: permission)
@@ -251,67 +259,46 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         dialogAsking = []
         dialogDesire = .wouldLike
     }
-    public func deniedData(for permission: SPPermission) -> SPPermissionDeniedAlertData? {
-//        log.debug("*** PERMISSIONS : deniedData *** (\(permission.name))")
-        return SPPermissionDeniedAlertData()
-    }
 
     // MARK: - Utility methods -
     func utilityAction(_ permission: WKRPTCLPermissions.Data.System) -> WKRPTCLPermissions.Data.Action {
         return WKRCorePermissions.utilityAction(permission)
     }
     class func utilityAction(_ permission: WKRPTCLPermissions.Data.System) -> WKRPTCLPermissions.Data.Action {
-        let spPermission = WKRCorePermissions.utilityConvert(permission)
-        if spPermission.isAuthorized {
+        let pkPermission = WKRCorePermissions.utilityConvert(permission)
+        if pkPermission.authorized {
             return .allowed
-        } else if spPermission.isDenied {
+        } else if pkPermission.denied {
             return .denied
         }
         return .unknown
     }
-    func utilityConvert(_ permission: WKRPTCLPermissions.Data.System) -> SPPermission {
+    func utilityConvert(_ permission: WKRPTCLPermissions.Data.System) -> Permission {
         return WKRCorePermissions.utilityConvert(permission)
     }
     // swiftlint:disable:next cyclomatic_complexity
-    class func utilityConvert(_ permission: WKRPTCLPermissions.Data.System) -> SPPermission {
+    class func utilityConvert(_ permission: WKRPTCLPermissions.Data.System) -> Permission {
         switch permission {
-        case .none:         return .bluetooth   // SHOULD NEVER OCCUR
-        case .bluetooth:    return .bluetooth
-        case .calendar:     return .calendar
-        case .camera:       return .camera
-        case .contacts:     return .contacts
-        case .locationAlwaysAndWhenInUse:   return .locationAlwaysAndWhenInUse
+        case .calendar: return .calendar
+        case .camera:   return .camera
         case .locationWhenInUse:    return .locationWhenInUse
-        case .mediaLibrary: return .mediaLibrary
-        case .microphone:   return .microphone
-        case .motion:       return .motion
         case .notification: return .notification
-        case .photoLibrary: return .photoLibrary
-        case .reminders:    return .reminders
-        case .speech:       return .speech
-        case .tracking:     return .tracking
+        default:
+            return .camera  // SHOULD NEVER OCCUR
         }
     }
-    func utilityConvert(_ spPermission: SPPermission) -> WKRPTCLPermissions.Data.System {
-        return WKRCorePermissions.utilityConvert(spPermission)
+    func utilityConvert(_ pkPermission: Permission) -> WKRPTCLPermissions.Data.System {
+        return WKRCorePermissions.utilityConvert(pkPermission)
     }
     // swiftlint:disable:next cyclomatic_complexity
-    class func utilityConvert(_ spPermission: SPPermission) -> WKRPTCLPermissions.Data.System {
-        switch spPermission {
-        case .bluetooth:    return .bluetooth
-        case .calendar:     return .calendar
-        case .camera:       return .camera
-        case .contacts:     return .contacts
-        case .locationAlwaysAndWhenInUse:   return .locationAlwaysAndWhenInUse
+    class func utilityConvert(_ pkPermission: Permission) -> WKRPTCLPermissions.Data.System {
+        switch pkPermission {
+        case .calendar: return .calendar
+        case .camera:   return .camera
         case .locationWhenInUse:    return .locationWhenInUse
-        case .mediaLibrary: return .mediaLibrary
-        case .microphone:   return .microphone
-        case .motion:       return .motion
         case .notification: return .notification
-        case .photoLibrary: return .photoLibrary
-        case .reminders:    return .reminders
-        case .speech:       return .speech
-        case .tracking:     return .tracking
+        default:
+            return .camera  // SHOULD NEVER OCCUR
         }
     }
 
@@ -338,7 +325,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         memoryPauseSettings[permissionPauseString] = 0
     }
     func utilityMemorySet(_ permissionAction: WKRPTCLPermissions.Data.Action,
-                          for spPermission: SPPermission) {
+                          for spPermission: Permission) {
         if spPermission == .calendar {
             self.utilityMemorySet(permissionAction, for: WKRPTCLPermissions.Data.System.calendar)
         } else if spPermission == .camera {
@@ -380,7 +367,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         }
         return retval
     }
-    func utilityMemorySetting(for spPermission: SPPermission) -> WKRPTCLPermissions.Data.Action {
+    func utilityMemorySetting(for spPermission: Permission) -> WKRPTCLPermissions.Data.Action {
         if spPermission == .calendar {
             return self.utilityMemorySetting(for: WKRPTCLPermissions.Data.System.calendar)
         } else if spPermission == .camera {
@@ -392,7 +379,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         }
         return WKRPTCLPermissions.Data.Action.unknown
     }
-    func utilityNotifyWaitingBlocks(of spPermission: SPPermission,
+    func utilityNotifyWaitingBlocks(of spPermission: Permission,
                                     and action: WKRPTCLPermissions.Data.Action) {
         // Notify waiting blocks
         permissionBlocks
@@ -421,22 +408,22 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
             }
         permissionsBlocks = newPermissionsBlocks
     }
-    func utilityPermissionsList(startingWith startingPermissions: [SPPermission]) -> [SPPermission] {
-        var allPermissions = Set(startingPermissions)
-        permissionBlocks.forEach { allPermissions.insert(self.utilityConvert($0.permission)) }
+    func utilityPermissionsList(startingWith startingPermissions: [Permission]) -> [Permission] {
+        var allPermissions = startingPermissions
+        permissionBlocks.forEach { allPermissions.append(self.utilityConvert($0.permission)) }
         permissionsBlocks.forEach {
-            $0.permissions.forEach { allPermissions.insert(self.utilityConvert($0)) }
+            $0.permissions.forEach { allPermissions.append(self.utilityConvert($0)) }
         }
         if dialogDesire == .present {
-            return Array(allPermissions)
+            return allPermissions
         }
-        let allPermissionsNotAuth = allPermissions.filter { !$0.isAuthorized }
+        let allPermissionsNotAuth = allPermissions.filter { !$0.authorized }
 
         var retval = allPermissionsNotAuth
         if retval.count < 3 {
             allPermissions.forEach {
                 if retval.count < 3 {
-                    retval.insert($0)
+                    retval.append($0)
                 }
             }
         }
@@ -467,7 +454,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
                         with: 0)
     }
     func utilitySet(_ permissionAction: WKRPTCLPermissions.Data.Action,
-                    for spPermission: SPPermission) {
+                    for spPermission: Permission) {
         if spPermission == .calendar {
             self.utilitySet(permissionAction, for: WKRPTCLPermissions.Data.System.calendar)
         } else if spPermission == .camera {
@@ -516,7 +503,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
         }
         return retval ?? .unknown
     }
-    func utilitySetting(for spPermission: SPPermission) -> WKRPTCLPermissions.Data.Action {
+    func utilitySetting(for spPermission: Permission) -> WKRPTCLPermissions.Data.Action {
         if spPermission == .calendar {
             return self.utilitySetting(for: WKRPTCLPermissions.Data.System.calendar)
         } else if spPermission == .camera {
@@ -549,25 +536,25 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
     }
     func utilityShouldContinue(_ desire: WKRPTCLPermissions.Data.Desire,
                                _ permissions: [WKRPTCLPermissions.Data.System]) -> Bool {
-        let spPermissions = permissions.map { self.utilityConvert($0) }
-        let spPermissionsNotAuth = spPermissions.filter { !$0.isAuthorized }
+        let pkPermissions = permissions.map { self.utilityConvert($0) }
+        let pkPermissionsNotAuth = pkPermissions.filter { !$0.authorized }
 
         switch desire {
         case .wouldLike:
-            let spPermissionsNotSkipped = spPermissionsNotAuth.filter {
+            let pkPermissionsNotSkipped = pkPermissionsNotAuth.filter {
                 self.utilitySetting(for: $0) != .skipped &&
                 self.utilitySetting(for: $0) != .denied
             }
-            if spPermissionsNotSkipped.isEmpty {
+            if pkPermissionsNotSkipped.isEmpty {
                 return false
             }
             fallthrough
         case .want:
-            let spPermissionsNotSkipped = spPermissionsNotAuth.filter {
+            let pkPermissionsNotSkipped = pkPermissionsNotAuth.filter {
                 self.utilityMemorySetting(for: $0) != .skipped &&
                 self.utilityMemorySetting(for: $0) != .denied
             }
-            if spPermissionsNotSkipped.isEmpty {
+            if pkPermissionsNotSkipped.isEmpty {
                 return false
             }
         case .need, .present:
@@ -581,7 +568,7 @@ open class WKRCorePermissions: WKRBlankPermissions, SPPermissionsDataSource, SPP
                                    for: self.utilityConvert(permission))
     }
     func utilityUpdateContinue(_ permissionAction: WKRPTCLPermissions.Data.Action,
-                               for permission: SPPermission) {
+                               for permission: Permission) {
         switch dialogDesire {
         case .wouldLike:
             self.utilitySet(permissionAction,

@@ -163,21 +163,21 @@
       }
     },
     {
+      "identity" : "permissionskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sparrowcode/PermissionsKit",
+      "state" : {
+        "revision" : "098f1455339a7f3ef57603260ca767a6544785b9",
+        "version" : "8.0.1"
+      }
+    },
+    {
       "identity" : "sfsymbol",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Nirma/SFSymbol",
       "state" : {
         "revision" : "90ec3de89965be4612b496211e1f31a363a1df42",
         "version" : "1.1.0"
-      }
-    },
-    {
-      "identity" : "sppermissions",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/DoubleNodeOpen/SPPermissions",
-      "state" : {
-        "revision" : "149cc769f34ec0330acbaa11858ce2e6135f3d7b",
-        "version" : "5.4.4"
       }
     },
     {

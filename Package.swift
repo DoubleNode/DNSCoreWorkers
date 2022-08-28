@@ -34,7 +34,7 @@ let package = Package(
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.9.1"),
         .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.83"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
-        .package(url: "https://github.com/DoubleNodeOpen/SPPermissions", from: "5.4.4"),
+        .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
         .package(url: "https://github.com/Square/Valet", from: "4.1.2"),
     ],
     targets: [
@@ -44,8 +44,11 @@ let package = Package(
             name: "DNSCoreWorkers",
             dependencies: [
                 "DNSAppCore", "DNSBaseTheme", "DNSBlankWorkers", "DNSCore",
-                "DNSCrashWorkers", "DNSError", "DNSProtocols", "Geodesy",
-                "SPPermissions", "Valet"
+                "DNSCrashWorkers", "DNSError", "DNSProtocols", "Geodesy", "Valet",
+                .product(name: "CalendarPermission", package: "PermissionsKit"),
+                .product(name: "CameraPermission", package: "PermissionsKit"),
+                .product(name: "LocationWhenInUsePermission", package: "PermissionsKit"),
+                .product(name: "NotificationPermission", package: "PermissionsKit"),
             ]),
         .testTarget(
             name: "DNSCoreWorkersTests",
