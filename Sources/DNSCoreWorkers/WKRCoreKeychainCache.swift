@@ -71,7 +71,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
             })
             .eraseToAnyPublisher()
     }
-    override open func intDoReadObject(for id: String,
+    override open func intDoReadString(for id: String,
                                        with progress: DNSPTCLProgressBlock?,
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubString {
         let future = WKRPTCLCacheFutString { [weak self] promise in
@@ -92,7 +92,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
         guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return future
             .catch({ _ in
-                nextWorker.doReadObject(for: id, with: progress)
+                nextWorker.doReadString(for: id, with: progress)
             })
             .eraseToAnyPublisher()
     }
