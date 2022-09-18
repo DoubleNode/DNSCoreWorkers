@@ -70,8 +70,9 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                     let prompt = Self.Localizations.Biometric.prompt
                     promise(.success(try self?.myValet.object(forKey: id,
                                                               withPrompt: prompt) as Any))
+                } else {
+                    promise(.success(Data() as Any))
                 }
-                promise(.success(Data() as Any))
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
@@ -97,8 +98,9 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                     let prompt = Self.Localizations.Biometric.prompt
                     promise(.success(try self?.myValet.string(forKey: id,
                                                               withPrompt: prompt) ?? ""))
+                } else {
+                    promise(.success(""))
                 }
-                promise(.success(""))
                 _ = resultBlock?(.completed)
             } catch {
                 let dnsError = DNSError.Cache
@@ -121,14 +123,10 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                                    then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
         let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
-                if object as? String != nil {
-                    // swiftlint:disable:next force_cast
-                    try self?.myValet.setString(object as! String,
-                                                forKey: id)
-                } else if object as? Data != nil {
-                    // swiftlint:disable:next force_cast
-                    try self?.myValet.setObject(object as! Data,
-                                                forKey: id)
+                if let string = object as? String {
+                    try self?.myValet.setString(string, forKey: id)
+                } else if let data = object as? Data {
+                    try self?.myValet.setObject(data, forKey: id)
                 }
                 promise(.success(object))
                 _ = resultBlock?(.completed)
