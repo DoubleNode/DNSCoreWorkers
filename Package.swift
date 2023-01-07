@@ -27,12 +27,12 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.10.2"),
-        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.10.1"),
-        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.10.35"),
-        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.10.18"),
-        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.10.28"),
+        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.10.5"),
+        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.10.42"),
+        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.10.32"),
+        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.10.35"),
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.10.0"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.10.49"),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.10.67"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
         .package(url: "https://github.com/Square/Valet", from: "4.1.2"),
