@@ -14,9 +14,9 @@ open class WKRCoreTestGeo: WKRBlankGeo {
 
     // MARK: - Business Logic / Single Item CRUD
     override open func intDoLocate(with progress: DNSPTCLProgressBlock?,
-                                   and block: WKRPTCLGeoBlkString?,
+                                   and block: WKRPTCLGeoBlkStringLocation?,
                                    then resultBlock: DNSPTCLResultBlock?) {
         _ = resultBlock?(.completed)
-        block?(.success(self.geohash))
+//        block?(.success(self.geohash))
     }
 }

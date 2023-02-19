@@ -20,17 +20,17 @@ import UIKit
 open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
-    var block: WKRPTCLGeoBlkString?
+    var block: WKRPTCLGeoBlkStringLocation?
 
     // MARK: - Internal Work Methods
     override open func intDoLocate(with progress: DNSPTCLProgressBlock?,
-                                   and block: WKRPTCLGeoBlkString?,
+                                   and block: WKRPTCLGeoBlkStringLocation?,
                                    then resultBlock: DNSPTCLResultBlock?) {
         self.block = block
 
         if DNSAppGlobals.isRunningTest {
             let dnsError = DNSError.Geo.denied(.coreWorkers(self))
-            block?(Result.failure(dnsError))
+            block?(.failure(dnsError))
             _ = resultBlock?(.error)
             return
         }
@@ -43,7 +43,7 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
             }
             if authorizationStatus == .denied {
                 let dnsError = DNSError.Geo.denied(.coreWorkers(self))
-                block?(Result.failure(dnsError))
+                block?(.failure(dnsError))
                 _ = resultBlock?(.error)
                 return
             }
@@ -51,6 +51,30 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
                 self.locationManager.startUpdatingLocation()
             }
             _ = resultBlock?(.completed)
+        }
+    }
+    override open func intDoLocate(_ address: DNSPostalAddress,
+                                   with progress: DNSPTCLProgressBlock?,
+                                   and block: WKRPTCLGeoBlkStringLocation?,
+                                   then resultBlock: DNSPTCLResultBlock?) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address.asString) { (placemarks, error) in
+            guard error == nil else {
+                let dnsError = DNSError.Geo.failure(error: error!, .coreWorkers(self))
+                block?(.failure(dnsError))
+                return
+            }
+            guard let placemarks,
+                  let placemark = placemarks.first,
+                  let location = placemark.location else {
+                let dnsError = DNSError.Geo.notFound(field: "address", value: address.asString,
+                                                     .coreWorkers(self))
+                block?(.failure(dnsError))
+                return
+            }
+            let geohash = location.geohash(precision: 8)
+            let results = (geohash, location)
+            block?(.success(results))
         }
     }
 
@@ -66,8 +90,8 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
         let userLocation: CLLocation = locations[0] as CLLocation
         locationManager.stopUpdatingLocation()
 
-        let geohash = userLocation.geohash(precision: 6)
-        self.block?(Result.success(geohash))
+        let geohash = userLocation.geohash(precision: 8)
+        self.block?(Result.success((geohash, userLocation)))
 
         dnsLog.debug("user latitude = \(userLocation.coordinate.latitude)")
         dnsLog.debug("user longitude = \(userLocation.coordinate.longitude)")

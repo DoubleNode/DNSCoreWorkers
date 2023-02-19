@@ -18,7 +18,7 @@ import UIKit
 open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
-    var block: WKRPTCLGeoBlkString?
+    var block: WKRPTCLGeoBlkStringLocation?
 
     // MARK: - UIWindowSceneDelegate methods
     // Called when the scene has moved from an inactive state to an active state.
