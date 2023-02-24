@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNodeOpen/AnimatedField.git",
       "state" : {
-        "revision" : "5c96fb63eb72631283abac52bab2f8adb26dea03",
-        "version" : "2.5.44"
+        "revision" : "9aa84cc2f9bcfb0174946f8ab849d315bd2ada86",
+        "version" : "2.5.49"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSBaseTheme.git",
       "state" : {
-        "revision" : "298795f3224966bc27845720d6decc4f0ac3acb0",
-        "version" : "1.10.5"
+        "revision" : "158b007e4c0ba032524e55059bc52995abb9c0b3",
+        "version" : "1.10.12"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSBlankWorkers.git",
       "state" : {
-        "revision" : "194072b0d68ee419992fa6f4d820637e58b2608f",
-        "version" : "1.10.44"
+        "revision" : "362cfe4fa527905b50a443c30074fa4cff1905f3",
+        "version" : "1.10.52"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSCore.git",
       "state" : {
-        "revision" : "aabe862ff1bb5b0e2130818b9e1c135dea6d23b0",
-        "version" : "1.10.39"
+        "revision" : "7df16f91c476c0d265dad6e99a92a74b97844ebb",
+        "version" : "1.10.46"
       }
     },
     {
@@ -122,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSCrashWorkers.git",
       "state" : {
-        "revision" : "e212fd7ebcfbb6adf4cff5b9bceaa3e4967296f7",
-        "version" : "1.10.37"
+        "revision" : "5da986cbb0d21dad5003f71a855bfce928de6747",
+        "version" : "1.10.43"
       }
     },
     {
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSDataObjects.git",
       "state" : {
-        "revision" : "bdc25f9858ded2cf026333236bc6725a008e0156",
-        "version" : "1.10.68"
+        "revision" : "01673b2bc0f1995c4a73ad75288843a7283acfa4",
+        "version" : "1.10.73"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSProtocols.git",
       "state" : {
-        "revision" : "3b7d8c90a504ab2d687f2e786b3666ba0b5c9e03",
-        "version" : "1.10.70"
+        "revision" : "468259b51863d4cc86749580dc03f1b9d0eb7144",
+        "version" : "1.10.79"
       }
     },
     {
@@ -194,8 +194,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Nirma/SFSymbol",
       "state" : {
-        "revision" : "d6680f79d5b293ddfc4640ad6d4101697426e840",
-        "version" : "2.0.0"
+        "revision" : "c18f260b9b69d1c24e40ad367e8a589563fb8f3d",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "skeletonview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Juanpe/SkeletonView.git",
+      "state" : {
+        "revision" : "739a4f5d78731bebc48811c75fa9e1f4c4cef23e",
+        "version" : "1.30.4"
       }
     },
     {
