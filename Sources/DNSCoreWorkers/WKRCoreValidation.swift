@@ -17,6 +17,152 @@ open class WKRCoreValidation: WKRBlankValidation {
     public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrength()
 
     // MARK: - Internal Work Methods
+    override open func intDoValidateAddress(for address: DNSPostalAddress?,
+                                            with config: Config.Address,
+                                            then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        let streetResult = self.intDoValidateAddressStreet(for: address?.street ?? "", with: config.street, then: nil)
+        guard case .success = streetResult else { return streetResult }
+        let street2Result = self.intDoValidateAddressStreet2(for: address?.subLocality ?? "", with: config.street2, then: nil)
+        guard case .success = street2Result else { return street2Result }
+        let cityResult = self.intDoValidateAddressCity(for: address?.city ?? "", with: config.city, then: nil)
+        guard case .success = cityResult else { return cityResult }
+        let stateResult = self.intDoValidateAddressState(for: address?.state ?? "", with: config.state, then: nil)
+        guard case .success = stateResult else { return stateResult }
+        let postalCodeResult = self.intDoValidateAddressPostalCode(for: address?.postalCode ?? "", with: config.postalCode, then: nil)
+        guard case .success = postalCodeResult else { return postalCodeResult }
+        return .success
+    }
+    override open func intDoValidateAddressCity(for city: String?,
+                                                with config: Config.Address.City,
+                                                then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        guard let city = city else {
+            return .failure(DNSError.Validation
+                .noValue(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard !config.required || !city.isEmpty else {
+            return .failure(DNSError.Validation
+                .required(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.minimumLength == nil || city.count >= config.minimumLength! else {
+            return .failure(DNSError.Validation
+                .tooShort(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.maximumLength == nil || city.count <= config.maximumLength! else {
+            return .failure(DNSError.Validation
+                .tooLong(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.regex == nil || city.dnsCheck(regEx: config.regex!) else {
+            return .failure(DNSError.Validation
+                .invalid(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        return .success
+    }
+    override open func intDoValidateAddressPostalCode(for postalCode: String?,
+                                                      with config: Config.Address.PostalCode,
+                                                      then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        guard let postalCode = postalCode else {
+            return .failure(DNSError.Validation
+                .noValue(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard !config.required || !postalCode.isEmpty else {
+            return .failure(DNSError.Validation
+                .required(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.minimumLength == nil || postalCode.count >= config.minimumLength! else {
+            return .failure(DNSError.Validation
+                .tooShort(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.maximumLength == nil || postalCode.count <= config.maximumLength! else {
+            return .failure(DNSError.Validation
+                .tooLong(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.regex == nil || postalCode.dnsCheck(regEx: config.regex!) else {
+            return .failure(DNSError.Validation
+                .invalid(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        return .success
+    }
+    override open func intDoValidateAddressState(for state: String?,
+                                                 with config: Config.Address.State,
+                                                 then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        guard let state = state else {
+            return .failure(DNSError.Validation
+                .noValue(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard !config.required || !state.isEmpty else {
+            return .failure(DNSError.Validation
+                .required(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.minimumLength == nil || state.count >= config.minimumLength! else {
+            return .failure(DNSError.Validation
+                .tooShort(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.maximumLength == nil || state.count <= config.maximumLength! else {
+            return .failure(DNSError.Validation
+                .tooLong(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.regex == nil || state.dnsCheck(regEx: config.regex!) else {
+            return .failure(DNSError.Validation
+                .invalid(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        return .success
+    }
+    override open func intDoValidateAddressStreet(for street: String?,
+                                                  with config: Config.Address.Street,
+                                                  then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        guard let street = street else {
+            return .failure(DNSError.Validation
+                .noValue(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard !config.required || !street.isEmpty else {
+            return .failure(DNSError.Validation
+                .required(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.minimumLength == nil || street.count >= config.minimumLength! else {
+            return .failure(DNSError.Validation
+                .tooShort(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.maximumLength == nil || street.count <= config.maximumLength! else {
+            return .failure(DNSError.Validation
+                .tooLong(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.regex == nil || street.dnsCheck(regEx: config.regex!) else {
+            return .failure(DNSError.Validation
+                .invalid(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        return .success
+    }
+    override open func intDoValidateAddressStreet2(for street2: String?,
+                                                   with config: Config.Address.Street2,
+                                                   then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
+        _ = resultBlock?(.completed)
+        guard let street2 = street2 else {
+            return .failure(DNSError.Validation
+                .noValue(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard !config.required || !street2.isEmpty else {
+            return .failure(DNSError.Validation
+                .required(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.minimumLength == nil || street2.count >= config.minimumLength! else {
+            return .failure(DNSError.Validation
+                .tooShort(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.maximumLength == nil || street2.count <= config.maximumLength! else {
+            return .failure(DNSError.Validation
+                .tooLong(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        guard config.regex == nil || street2.dnsCheck(regEx: config.regex!) else {
+            return .failure(DNSError.Validation
+                .invalid(fieldName: config.fieldName, .coreWorkers(self)))
+        }
+        return .success
+    }
     override open func intDoValidateBirthdate(for birthdate: Date?,
                                               with config: Config.Birthdate,
                                               then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLValidationResVoid {
