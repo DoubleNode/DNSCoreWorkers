@@ -12,9 +12,9 @@ import PackageDescription
 let package = Package(
     name: "DNSCoreWorkers",
     platforms: [
-        .iOS(.v15),
-        .tvOS(.v15),
-        .macOS(.v10_15),
+        .iOS(.v16),
+        .tvOS(.v16),
+        .macOS(.v13),
         .watchOS(.v9),
     ],
     products: [
@@ -26,16 +26,16 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.10.2"),
-        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.10.28"),
-        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.10.68"),
-        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.10.52"),
-        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.10.58"),
-        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.10.0"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.10.98"),
+        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.11.0"),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.11.0"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
-        .package(url: "https://github.com/Square/Valet", from: "4.1.2"),
+        .package(url: "https://github.com/Square/Valet", from: "4.2.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
