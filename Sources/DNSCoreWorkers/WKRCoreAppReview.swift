@@ -28,7 +28,7 @@ open class WKRCoreAppReview: WKRBlankAppReview {
                 return .success
             }
         }
-        SKStoreReviewController.requestReview()
+        SKStoreReviewController.dnsRequestReviewInCurrentScene()
         _ = resultBlock?(.completed)
         return .success
     }
