@@ -29,13 +29,13 @@ let package = Package(
         .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.11.1"),
         .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.11.1"),
         .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.11.19"),
-        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.11.6"),
+        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.11.7"),
         .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.11.17"),
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.11.1"),
         .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.11.10"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
-        .package(url: "https://github.com/Square/Valet", from: "4.2.0"),
+        .package(url: "https://github.com/Square/Valet", from: "4.3.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
