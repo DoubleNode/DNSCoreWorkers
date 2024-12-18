@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
-        "version" : "5.9.1"
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSBlankWorkers.git",
       "state" : {
-        "revision" : "59802e8b83e771cf18ada89c0a74560e704bdb18",
-        "version" : "1.11.19"
+        "revision" : "79edb96190a984c756272690b6577c85e70fc733",
+        "version" : "1.11.21"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSCore.git",
       "state" : {
-        "revision" : "2675d55fce67c027d9c8209d9d2ec2812858d9b4",
-        "version" : "1.11.6"
+        "revision" : "6ae42e7423029031d27c53702554e86eed6a055e",
+        "version" : "1.11.8"
       }
     },
     {
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSDataObjects.git",
       "state" : {
-        "revision" : "91eaa1d16e774f6dcb1100ae275001647ced94e3",
-        "version" : "1.11.8"
+        "revision" : "d11c7aa001835d143c0de3ae47ae64ca88168efa",
+        "version" : "1.11.9"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSProtocols.git",
       "state" : {
-        "revision" : "d89f126dbe2172212a593fa21363fe561977c208",
-        "version" : "1.11.10"
+        "revision" : "11309d366fe3f171d89ff36a370f71ac463d85f0",
+        "version" : "1.11.12"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Juanpe/SkeletonView.git",
       "state" : {
-        "revision" : "739a4f5d78731bebc48811c75fa9e1f4c4cef23e",
-        "version" : "1.30.4"
+        "revision" : "2f5274827d310e32c09325dd3e0007120940988e",
+        "version" : "1.31.0"
       }
     },
     {
@@ -214,6 +214,15 @@
       "state" : {
         "revision" : "a5546b7ae52f8d6e0b067c25606f3455056b92a5",
         "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swiftlintplugins",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "state" : {
+        "revision" : "f9731bef175c3eea3a0ca960f1be78fcc2bc7853",
+        "version" : "0.57.1"
       }
     },
     {
@@ -239,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Square/Valet",
       "state" : {
-        "revision" : "89f12b93553055f4908c0d2548c9b8655926940a",
-        "version" : "4.2.0"
+        "revision" : "3df8eaa90e1fa0d80830733cdc3c9e098146af3d",
+        "version" : "4.3.0"
       }
     }
   ],
