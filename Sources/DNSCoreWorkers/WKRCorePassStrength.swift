@@ -10,8 +10,8 @@ import DNSBlankWorkers
 import DNSProtocols
 import Foundation
 
-open class WKRCorePassStrength: WKRBlankPassStrength {
-    public var minimunLength = 8
+open class WKRCorePassStrength: WKRBlankPassStrength, @unchecked Sendable {
+    public var myMinimumLength: Int32 = 8
     
     let regexOneUppercase = "^(?=.*[A-Z]).*$"
     let regexOneLowercase = "^(?=.*[a-z]).*$"
@@ -25,7 +25,7 @@ open class WKRCorePassStrength: WKRBlankPassStrength {
         var strength = 0
         
         if len > 0 { strength += 1 }
-        if len >= self.minimumLength { strength += 1 }
+        if len >= Int(self.myMinimumLength) { strength += 1 }
         if len >= 10 { strength += 1 }
 
         if self.utilityValidate(string: password, with: regexOneUppercase, caseSensitive: true) > 0 { strength += 1 }

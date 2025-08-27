@@ -12,17 +12,17 @@ import Foundation
 
 public extension DNSAppConstants {
     enum Biometrics {
-        static let enabled: String = {
+        @MainActor static var enabled: String {
             "\(DNSCore.bundleName)_Biometrics_enabled"
-        }()
-        static let password: String = {
+        }
+        @MainActor static var password: String {
             "\(DNSCore.bundleName)_Biometrics_password"
-        }()
-        static let username: String = {
+        }
+        @MainActor static var username: String {
             "\(DNSCore.bundleName)_Biometrics_username"
-        }()
-        static let valet: String = {
+        }
+        @MainActor static var valet: String {
             "\(DNSCore.bundleName)_Biometrics_valet"
-        }()
+        }
     }
 }

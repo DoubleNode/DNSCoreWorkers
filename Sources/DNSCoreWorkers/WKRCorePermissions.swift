@@ -15,14 +15,14 @@ import DNSError
 import DNSProtocols
 import UIKit
 
-import PermissionsKit
+@preconcurrency import PermissionsKit
 import CalendarPermission
 import CameraPermission
 import LocationWhenInUsePermission
 import NotificationPermission
 
 // swiftlint:disable:next type_body_length
-open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, PermissionsDelegate {
+open class WKRCorePermissions: WKRBlankPermissions, @preconcurrency PermissionsDataSource, PermissionsDelegate, @unchecked Sendable {
     struct PermissionBlock {
         var permission: WKRPTCLPermissions.Data.System
         var block: WKRPTCLPermissionsBlkAction?
@@ -70,8 +70,8 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
         }
     }
 
-    @Atomic var dialogAsking: [WKRPTCLPermissions.Data.System] = []
-    @Atomic var dialogDesire: WKRPTCLPermissions.Data.Desire = .wouldLike
+    nonisolated(unsafe) var dialogAsking: [WKRPTCLPermissions.Data.System] = []
+    nonisolated(unsafe) var dialogDesire: WKRPTCLPermissions.Data.Desire = .wouldLike
     @Atomic var memorySettings: [String: WKRPTCLPermissions.Data.Action] = [:]
     @Atomic var memoryPauseSettings: [String: Int] = [:]
     @Atomic var permissionBlocks: [PermissionBlock] = []
@@ -103,32 +103,13 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
 //        log.debug("***PERM-1*** \(desire.rawValue) \(permission.rawValue)")
         guard self.utilityShouldContinue(desire,
                                          permission) else { return }
-        DNSCore.reportLog("doRequest(permission:)")
-        guard let viewController = UIApplication.shared.dnsVisibleViewController else { return }
+        
         guard dialogAsking.isEmpty else { return }
         dialogAsking = [permission]
         dialogDesire = desire
 
-        let requestPermissions = self.utilityPermissionsList(startingWith: [self.utilityConvert(permission)])
-        DNSUIThread.run {
-            let anyDenied = requestPermissions.contains { $0.denied }
-            if self.nativeMode && !anyDenied {
-                let controller = PermissionsKit.native(Array(requestPermissions))
-                controller.delegate = self
-                controller.present(on: viewController)
-                return
-            }
-            if requestPermissions.count < 4 {
-                let controller = PermissionsKit.dialog(Array(requestPermissions))
-                controller.dataSource = self
-                controller.delegate = self
-                controller.present(on: viewController)
-            } else {
-                let controller = PermissionsKit.list(Array(requestPermissions))
-                controller.dataSource = self
-                controller.delegate = self
-                controller.present(on: viewController)
-            }
+        Task { @MainActor [permission] in
+            self.utilityPresentRequestDialog(for: permission)
         }
     }
     override open func intDoRequest(_ desire: WKRPTCLPermissions.Data.Desire,
@@ -151,32 +132,15 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
 //        let debugPermissions = permissions.map{ $0.rawValue }.joined(separator: "|")
 //        log.debug("***PERM-2*** \(desire.rawValue) \(debugPermissions)")
         guard self.utilityShouldContinue(desire, permissions) else { return }
-        DNSCore.reportLog("doRequest(permissions:)")
-        guard let viewController = UIApplication.shared.dnsVisibleViewController else { return }
+        
+        Task { await DNSCore.reportLog("doRequest(permissions:)") }
+        
         guard dialogAsking.isEmpty else { return }
         dialogAsking = permissions
         dialogDesire = desire
 
-        let requestPermissions = self.utilityPermissionsList(startingWith: pkPermissions)
-        DNSUIThread.run {
-            let anyDenied = requestPermissions.contains { $0.denied }
-            if self.nativeMode && !anyDenied {
-                let controller = PermissionsKit.native(Array(requestPermissions))
-                controller.delegate = self
-                controller.present(on: viewController)
-                return
-            }
-            if requestPermissions.count < 4 {
-                let controller = PermissionsKit.dialog(Array(requestPermissions))
-                controller.dataSource = self
-                controller.delegate = self
-                controller.present(on: viewController)
-            } else {
-                let controller = PermissionsKit.list(Array(requestPermissions))
-                controller.dataSource = self
-                controller.delegate = self
-                controller.present(on: viewController)
-            }
+        Task { @MainActor [permissions] in
+            self.utilityPresentRequestDialog(for: permissions)
         }
     }
     override open func intDoStatus(of permissions: [WKRPTCLPermissions.Data.System],
@@ -186,7 +150,7 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
         guard !permissions.isEmpty else {
             let dnsError = DNSError.WorkerBase
                 .invalidParameters(parameters: ["permissions"], .coreWorkers(self))
-            DNSCore.reportError(dnsError)
+            Task { await DNSCore.reportError(dnsError) }
             block?(.success([]))
             _ = resultBlock?(.error)
             return
@@ -211,6 +175,7 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
     }
 
     // MARK: - PermissionsDataSource -
+    @MainActor
     public func configure(_ cell: PermissionTableViewCell,
                           for permission: Permission) {
         cell.permissionButton.centerYAnchor.constraint(equalTo: cell.permissionTitleLabel.layoutMarginsGuide.centerYAnchor).isActive = true
@@ -579,6 +544,52 @@ open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, Permi
                                   for: permission)
         case .need, .present:
             break
+        }
+    }
+    
+    // MARK: - Private Utility Methods -
+    @MainActor
+    private func utilityPresentRequestDialog(for permission: WKRPTCLPermissions.Data.System) {
+        DNSCore.reportLog("doRequest(permission:)")
+        guard let viewController = UIApplication.shared.dnsVisibleViewController else { return }
+        
+        let requestPermissions = self.utilityPermissionsList(startingWith: [self.utilityConvert(permission)])
+        let anyDenied = requestPermissions.contains { $0.denied }
+        if self.nativeMode && !anyDenied {
+            let controller = PermissionsKit.native(Array(requestPermissions))
+            controller.delegate = self
+            controller.present(on: viewController)
+        } else {
+            let controller = PermissionsKit.dialog(Array(requestPermissions))
+            controller.dataSource = self
+            controller.delegate = self
+            controller.present(on: viewController)
+        }
+    }
+    
+    @MainActor
+    private func utilityPresentRequestDialog(for permissions: [WKRPTCLPermissions.Data.System]) {
+        guard let viewController = UIApplication.shared.dnsVisibleViewController else { return }
+        
+        let localPkPermissions = permissions.map { self.utilityConvert($0) }
+        let requestPermissions = self.utilityPermissionsList(startingWith: localPkPermissions)
+        let anyDenied = requestPermissions.contains { $0.denied }
+        if self.nativeMode && !anyDenied {
+            let controller = PermissionsKit.native(Array(requestPermissions))
+            controller.delegate = self
+            controller.present(on: viewController)
+            return
+        }
+        if requestPermissions.count < 4 {
+            let controller = PermissionsKit.dialog(Array(requestPermissions))
+            controller.dataSource = self
+            controller.delegate = self
+            controller.present(on: viewController)
+        } else {
+            let controller = PermissionsKit.list(Array(requestPermissions))
+            controller.dataSource = self
+            controller.delegate = self
+            controller.present(on: viewController)
         }
     }
 }

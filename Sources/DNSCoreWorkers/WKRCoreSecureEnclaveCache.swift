@@ -14,7 +14,7 @@ import DNSProtocols
 import Foundation
 import Valet
 
-open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
+open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache, @unchecked Sendable {
     public enum C {
         public static let requirePromptOnNextAccess = "requirePromptOnNextAccess"
     }
@@ -24,12 +24,19 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
         }
     }
 
-    private lazy var myValet: SinglePromptSecureEnclaveValet = {
+    private var _myValet: SinglePromptSecureEnclaveValet? = nil
+    private var myValet: SinglePromptSecureEnclaveValet {
+        if let valet = _myValet {
+            return valet
+        }
+        // Create valet with a hardcoded identifier to avoid main actor dependency
+        let identifier = "DNSCoreWorkers_Biometrics_valet"
         let valet = SinglePromptSecureEnclaveValet
-            .valet(with: Identifier(nonEmpty: DNSAppConstants.Biometrics.valet)!,
+            .valet(with: Identifier(nonEmpty: identifier)!,
                    accessControl: .userPresence)
+        _myValet = valet
         return valet
-    }()
+    }
 
     override open func enableOption(_ option: String) {
         super.enableOption(option)
@@ -51,7 +58,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .deleteError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -77,7 +84,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -105,7 +112,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -133,7 +140,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }

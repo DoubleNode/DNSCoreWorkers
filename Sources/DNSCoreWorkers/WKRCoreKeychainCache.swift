@@ -14,7 +14,7 @@ import DNSProtocols
 import Foundation
 import Valet
 
-open class WKRCoreKeychainCache: WKRBlankCache {
+open class WKRCoreKeychainCache: WKRBlankCache, @unchecked Sendable {
     public enum C {
         public static let valetId = "WKRCoreKeychainCache"
     }
@@ -36,7 +36,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .deleteError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -60,7 +60,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -86,7 +86,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }
@@ -114,7 +114,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
             } catch {
                 let dnsError = DNSError.Cache
                     .readError(error: error, .coreWorkers(self!))
-                DNSCore.reportError(dnsError)
+                Task { await DNSCore.reportError(dnsError) }
                 promise(.failure(dnsError))
                 _ = resultBlock?(.error)
             }

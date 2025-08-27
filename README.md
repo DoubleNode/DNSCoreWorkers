@@ -20,9 +20,9 @@ DNSCoreWorkers is a collection of core networking classes used for the DNSFramew
 
 ## Requirements
 
--   iOS 16.0+ / macOS 13.3+ / tvOS 16.4+ / watchOS 9.4+
--   Xcode 14.3.1+
--   Swift 5.8+
+-   iOS 17+ / macOS 15+ / tvOS 18+ / watchOS 11+
+-   Xcode 16.4+
+-   Swift 6.0+
 
 ## Installation
 
@@ -34,19 +34,19 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/DoubleNode/DNSCoreWorkers.git", from: "1.11.30")
+.package(url: "https://github.com/DoubleNode/DNSCoreWorkers.git", from: "2.0.0")
 ]
 ```
 
 ## Dependencies
 
--   DNSAppCore v1.11.1+
--   DNSBaseTheme v1.11.1+
--   DNSBlankWorkers v1.11.22+
--   DNSCore v1.11.10+
--   DNSCrashWorkers v1.11.17+
--   DNSError v1.11.1+
--   DNSProtocols v1.11.17+
+-   DNSAppCore v2.0.0+
+-   DNSBaseTheme v2.0.1+
+-   DNSBlankWorkers v2.0.0+
+-   DNSCore v2.0.2+
+-   DNSCrashWorkers v2.0.0+
+-   DNSError v2.0.1+
+-   DNSProtocols v2.0.4+
 -   Geodesy v1.2.2+
 -   PermissionsKit v8.0.1+
 -   Valet v4.3.0+

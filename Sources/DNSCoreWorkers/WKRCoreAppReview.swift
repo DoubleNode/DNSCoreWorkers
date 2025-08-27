@@ -12,7 +12,7 @@ import DNSCore
 import DNSProtocols
 import StoreKit
 
-open class WKRCoreAppReview: WKRBlankAppReview {
+open class WKRCoreAppReview: WKRBlankAppReview, @unchecked Sendable {
     public var windowScene: UIWindowScene?
 
     // MARK: - Internal Work Methods
@@ -21,16 +21,44 @@ open class WKRCoreAppReview: WKRBlankAppReview {
             _ = resultBlock?(.completed)
             return .success
         }
-        if self.windowScene != nil {
-            if #available(iOS 14.0, *) {
-                SKStoreReviewController.requestReview(in: self.windowScene!)
-                _ = resultBlock?(.completed)
-                return .success
+        
+        Task { @MainActor in
+            if #available(iOS 18.0, *) {
+                // Use the new StoreKit AppStore API for iOS 18.0+
+                if let windowScene = self.windowScene {
+                    do {
+                        try await StoreKit.AppStore.requestReview(in: windowScene)
+                    } catch {
+                        // If the new API fails, fall back to the old API
+                        await self.legacyRequestReview()
+                    }
+                } else {
+                    // No window scene available, fall back to legacy method
+                    await self.legacyRequestReview()
+                }
+            } else {
+                // Use legacy API for iOS versions below 18.0
+                await self.legacyRequestReview()
             }
         }
-        SKStoreReviewController.dnsRequestReviewInCurrentScene()
         _ = resultBlock?(.completed)
         return .success
+    }
+
+    // MARK: - Private Methods -
+    @MainActor
+    private func legacyRequestReview() async {
+        if let windowScene = self.windowScene {
+            if #available(iOS 14.0, *) {
+                SKStoreReviewController.requestReview(in: windowScene)
+            } else {
+                // For iOS versions below 14.0, use the global method
+                SKStoreReviewController.requestReview()
+            }
+        } else {
+            // Use the extension method if no window scene is available
+            SKStoreReviewController.dnsRequestReviewInCurrentScene()
+        }
     }
 
     // MARK: - Utility methods -

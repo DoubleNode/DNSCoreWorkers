@@ -15,7 +15,7 @@ import DNSProtocols
 import Geodesy
 import UIKit
 
-open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate {
+open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate, @unchecked Sendable {
     lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
 
     var block: WKRPTCLGeoBlkStringLocation?

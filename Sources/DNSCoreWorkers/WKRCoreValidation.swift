@@ -13,8 +13,8 @@ import DNSError
 import DNSProtocols
 import Foundation
 
-open class WKRCoreValidation: WKRBlankValidation {
-    public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrength()
+open class WKRCoreValidation: WKRBlankValidation, @unchecked Sendable {
+    public var wkrPassStrength: any WKRPTCLPassStrength = WKRCrashPassStrength()
 
     // MARK: - Internal Work Methods
     override open func intDoValidateAddress(for address: DNSPostalAddress?,
