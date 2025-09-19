@@ -4,7 +4,7 @@
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreValidationWorker
 //
 //  Created by Darren Ehlers.
-//  Copyright © 2022 - 2016 DoubleNode.com. All rights reserved.
+//  Copyright © 2025 - 2016 DoubleNode.com. All rights reserved.
 //
 
 import PackageDescription
@@ -14,7 +14,8 @@ let package = Package(
     platforms: [
         .iOS(.v16),
         .tvOS(.v16),
-        .macOS(.v13),
+        .macCatalyst(.v16),
+//        .macOS(.v13),
         .watchOS(.v9),
     ],
     products: [
@@ -27,12 +28,17 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.11.1"),
-        .package(url: "https://github.com/DoubleNode/DNSBaseTheme.git", from: "1.11.1"),
         .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.11.22"),
         .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.11.10"),
         .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.11.17"),
         .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.11.1"),
         .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.11.17"),
+//        .package(path: "../DNSAppCore.git"),
+//        .package(path: "../DNSBlankWorkers.git"),
+//        .package(path: "../DNSCore.git"),
+//        .package(path: "../DNSCrashWorkers.git"),
+//        .package(path: "../DNSError.git"),
+//        .package(path: "../DNSProtocols.git"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
         .package(url: "https://github.com/Square/Valet", from: "4.3.0"),
@@ -43,7 +49,7 @@ let package = Package(
         .target(
             name: "DNSCoreWorkers",
             dependencies: [
-                "DNSAppCore", "DNSBaseTheme", "DNSBlankWorkers", "DNSCore",
+                "DNSAppCore", "DNSBlankWorkers", "DNSCore",
                 "DNSCrashWorkers", "DNSError", "DNSProtocols", "Geodesy", "Valet",
                 .product(name: "CalendarPermission", package: "PermissionsKit"),
                 .product(name: "CameraPermission", package: "PermissionsKit"),
