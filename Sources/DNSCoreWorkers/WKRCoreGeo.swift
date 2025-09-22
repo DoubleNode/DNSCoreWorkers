@@ -6,7 +6,9 @@
 //  Copyright © 2025 - 2016 DoubleNode.com. All rights reserved.
 //
 
+#if !TESTING
 import CoreLocation
+#endif
 import DNSAppCore
 import DNSBlankWorkers
 import DNSCore
@@ -18,9 +20,32 @@ import Geodesy
 import UIKit
 
 open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
-    lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
+    private let serviceFactory: ServiceFactoryProtocol
+    private var locationService: LocationServiceProtocol?
 
     var block: WKRPTCLGeoBlkStringLocation?
+
+    // MARK: - Initialization
+    public init(serviceFactory: ServiceFactoryProtocol? = nil) {
+        self.serviceFactory = serviceFactory ?? ProductionServiceFactory()
+        super.init()
+    }
+
+    required public init() {
+        self.serviceFactory = ProductionServiceFactory()
+        super.init()
+    }
+
+    // MARK: - Lazy Service Initialization
+    private var _locationService: LocationServiceProtocol {
+        if locationService == nil {
+            locationService = serviceFactory.makeLocationService()
+            locationService?.delegate = self
+            locationService?.desiredAccuracy = kCLLocationAccuracyBest
+            locationService?.allowsBackgroundLocationUpdates = false
+        }
+        return locationService!
+    }
 
     // MARK: - Internal Work Methods
     override open func intDoLocate(with progress: DNSPTCLProgressBlock?,
@@ -28,27 +53,23 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
                                    then resultBlock: DNSPTCLResultBlock?) {
         self.block = block
 
-        if DNSAppGlobals.isRunningTest {
+        // Check if using mock services (test mode) by checking service factory type
+        if serviceFactory is TestServiceFactory {
             let dnsError = DNSError.Geo.denied(.coreWorkers(self))
             block?(.failure(dnsError))
             _ = resultBlock?(.error)
             return
         }
         DNSUIThread.run {
-            let authorizationStatus: CLAuthorizationStatus
-            if #available(iOS 14.0, *) {
-                authorizationStatus = self.locationManager.authorizationStatus
-            } else {
-                authorizationStatus = CLLocationManager.authorizationStatus()
-            }
+            let authorizationStatus = self._locationService.authorizationStatus()
             if authorizationStatus == .denied {
                 let dnsError = DNSError.Geo.denied(.coreWorkers(self))
                 block?(.failure(dnsError))
                 _ = resultBlock?(.error)
                 return
             }
-            if CLLocationManager.locationServicesEnabled() {
-                self.locationManager.startUpdatingLocation()
+            if self._locationService.locationServicesEnabled() {
+                self._locationService.startUpdatingLocation()
             }
             _ = resultBlock?(.completed)
         }
@@ -88,7 +109,7 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
         let userLocation: CLLocation = locations[0] as CLLocation
-        locationManager.stopUpdatingLocation()
+        _locationService.stopUpdatingLocation()
 
         let geohash = userLocation.geohash(precision: 8)
         self.block?(Result.success((geohash, userLocation)))
@@ -98,13 +119,4 @@ open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
         dnsLog.debug("user geohash = \(geohash)")
     }
 
-    // MARK: - Utility methods
-    private func utilityCreateLocationManager() -> CLLocationManager {
-        let retval = CLLocationManager()
-        retval.delegate = self
-        retval.desiredAccuracy = kCLLocationAccuracyBest
-        retval.allowsBackgroundLocationUpdates = false
-        retval.requestWhenInUseAuthorization()
-        return retval
-    }
 }

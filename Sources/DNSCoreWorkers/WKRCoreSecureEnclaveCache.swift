@@ -12,7 +12,9 @@ import DNSCore
 import DNSError
 import DNSProtocols
 import Foundation
+#if !TESTING
 import Valet
+#endif
 
 open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
     public enum C {
@@ -24,19 +26,22 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
         }
     }
 
-    private lazy var myValet: SinglePromptSecureEnclaveValet = {
-        let valet = SinglePromptSecureEnclaveValet
-            .valet(with: Identifier(nonEmpty: DNSAppConstants.Biometrics.valet)!,
-                   accessControl: .userPresence)
-        return valet
-    }()
+    private var secureCacheService: SecureCacheServiceProtocol?
+
+    // MARK: - Secure Enclave Service Initialization
+    private var _secureCacheService: SecureCacheServiceProtocol {
+        if secureCacheService == nil {
+            secureCacheService = serviceFactory.makeSecureCacheService(identifier: DNSAppConstants.Biometrics.valet)
+        }
+        return secureCacheService!
+    }
 
     override open func enableOption(_ option: String) {
         super.enableOption(option)
         if option == C.requirePromptOnNextAccess {
-            myValet.requirePromptOnNextAccess()
+            try? _secureCacheService.requirePromptOnNextAccess(forKey: "")
         }
-        nextWorker?.enableOption(option)
+        nextWKRPTCLCache?.enableOption(option)
     }
 
     // MARK: - Internal Work Methods
@@ -45,7 +50,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                                          then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubVoid {
         let future = WKRPTCLCacheFutVoid { [weak self] promise in
             do {
-                try self?.myValet.removeObject(forKey: id)
+                try self?._secureCacheService.removeObject(forKey: id)
                 promise(.success)
                 _ = resultBlock?(.completed)
             } catch {
@@ -56,7 +61,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
         return Publishers.Zip(future, nextWorker.doDeleteObject(for: id, with: progress))
             .map { _, _ in () }
             .eraseToAnyPublisher()
@@ -66,10 +71,8 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubAny {
         let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
-                if try self?.myValet.containsObject(forKey: id) ?? false {
-                    let prompt = Self.Localizations.Biometric.prompt
-                    promise(.success(try self?.myValet.object(forKey: id,
-                                                              withPrompt: prompt) as Any))
+                if try self?._secureCacheService.containsObject(forKey: id) ?? false {
+                    promise(.success(try self?._secureCacheService.object(forKey: id) as Any))
                 } else {
                     promise(.success(Data() as Any))
                 }
@@ -82,7 +85,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
         return future
             .catch({ _ in
                 nextWorker.doReadObject(for: id, with: progress)
@@ -94,10 +97,8 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                                        then resultBlock: DNSPTCLResultBlock?) -> WKRPTCLCachePubString {
         let future = WKRPTCLCacheFutString { [weak self] promise in
             do {
-                if try self?.myValet.containsObject(forKey: id) ?? false {
-                    let prompt = Self.Localizations.Biometric.prompt
-                    promise(.success(try self?.myValet.string(forKey: id,
-                                                              withPrompt: prompt) ?? ""))
+                if try self?._secureCacheService.containsObject(forKey: id) ?? false {
+                    promise(.success(try self?._secureCacheService.string(forKey: id) ?? ""))
                 } else {
                     promise(.success(""))
                 }
@@ -110,7 +111,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
         return future
             .catch({ _ in
                 nextWorker.doReadString(for: id, with: progress)
@@ -124,9 +125,9 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
         let future = WKRPTCLCacheFutAny { [weak self] promise in
             do {
                 if let string = object as? String {
-                    try self?.myValet.setString(string, forKey: id)
+                    try self?._secureCacheService.setString(string, forKey: id)
                 } else if let data = object as? Data {
-                    try self?.myValet.setObject(data, forKey: id)
+                    try self?._secureCacheService.setObject(data, forKey: id)
                 }
                 promise(.success(object))
                 _ = resultBlock?(.completed)
@@ -138,7 +139,7 @@ open class WKRCoreSecureEnclaveCache: WKRCoreKeychainCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
         return Publishers.Zip(future, nextWorker.doUpdate(object: object, for: id, with: progress))
             .map { _, _ in object }
             .eraseToAnyPublisher()

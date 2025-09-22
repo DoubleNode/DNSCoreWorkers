@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:6.0
 //
 //  Package.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSCoreValidationWorker
@@ -12,11 +12,11 @@ import PackageDescription
 let package = Package(
     name: "DNSCoreWorkers",
     platforms: [
-        .iOS(.v16),
-        .tvOS(.v16),
+        .iOS(.v18),
+        .tvOS(.v18),
         .macCatalyst(.v16),
-//        .macOS(.v13),
-        .watchOS(.v9),
+        .macOS(.v15),
+        .watchOS(.v11),
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
@@ -27,18 +27,22 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", from: "1.11.1"),
-        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", from: "1.11.22"),
-        .package(url: "https://github.com/DoubleNode/DNSCore.git", from: "1.11.10"),
-        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", from: "1.11.17"),
-        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.11.1"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.11.17"),
+        .package(url: "https://github.com/DoubleNode/DNSAppCore.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSBlankWorkers.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSCore.git", .upToNextMajor(from: "1.12.1")),
+        .package(url: "https://github.com/DoubleNode/DNSCrashWorkers.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSError.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSThemeObjects.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSThemeTypes.git", .upToNextMajor(from: "1.12.0")),
 //        .package(path: "../DNSAppCore.git"),
 //        .package(path: "../DNSBlankWorkers.git"),
 //        .package(path: "../DNSCore.git"),
 //        .package(path: "../DNSCrashWorkers.git"),
 //        .package(path: "../DNSError.git"),
 //        .package(path: "../DNSProtocols.git"),
+//        .package(path: "../DNSThemeObjects.git"),
+//        .package(path: "../DNSThemeTypes.git"),
         .package(url: "https://github.com/nidegen/Geodesy", from: "1.2.2"),
         .package(url: "https://github.com/sparrowcode/PermissionsKit", from: "8.0.1"),
         .package(url: "https://github.com/Square/Valet", from: "4.3.0"),
@@ -49,8 +53,8 @@ let package = Package(
         .target(
             name: "DNSCoreWorkers",
             dependencies: [
-                "DNSAppCore", "DNSBlankWorkers", "DNSCore",
-                "DNSCrashWorkers", "DNSError", "DNSProtocols", "Geodesy", "Valet",
+                "DNSAppCore", "DNSBlankWorkers", "DNSCore", "DNSCrashWorkers", "DNSError",
+                "DNSThemeObjects", "DNSThemeTypes", "DNSProtocols", "Geodesy", "Valet",
                 .product(name: "CalendarPermission", package: "PermissionsKit"),
                 .product(name: "CameraPermission", package: "PermissionsKit"),
                 .product(name: "LocationWhenInUsePermission", package: "PermissionsKit"),
@@ -58,7 +62,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "DNSCoreWorkersTests",
-            dependencies: ["DNSCoreWorkers"]),
+            dependencies: ["DNSCoreWorkers"],
+            resources: [
+                .process("Constants.plist")
+            ]),
     ],
     swiftLanguageVersions: [.v5]
 )

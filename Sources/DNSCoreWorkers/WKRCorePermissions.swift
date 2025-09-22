@@ -7,22 +7,45 @@
 //
 
 import AtomicSwift
-import DNSBaseTheme
 import DNSBlankWorkers
 import DNSCore
 import DNSCoreThreading
 import DNSError
 import DNSProtocols
+import DNSThemeObjects
 import UIKit
 
+#if !TESTING
 import PermissionsKit
 import CalendarPermission
 import CameraPermission
 import LocationWhenInUsePermission
 import NotificationPermission
+#endif
 
 // swiftlint:disable:next type_body_length
 open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, PermissionsDelegate {
+    private let serviceFactory: ServiceFactoryProtocol
+    private var permissionService: PermissionServiceProtocol?
+
+    // MARK: - Initialization
+    public init(serviceFactory: ServiceFactoryProtocol? = nil) {
+        self.serviceFactory = serviceFactory ?? ProductionServiceFactory()
+        super.init()
+    }
+
+    required public init() {
+        self.serviceFactory = ProductionServiceFactory()
+        super.init()
+    }
+
+    // MARK: - Lazy Service Initialization
+    private var _permissionService: PermissionServiceProtocol {
+        if permissionService == nil {
+            permissionService = serviceFactory.makePermissionService()
+        }
+        return permissionService!
+    }
     struct PermissionBlock {
         var permission: WKRPTCLPermissions.Data.System
         var block: WKRPTCLPermissionsBlkAction?

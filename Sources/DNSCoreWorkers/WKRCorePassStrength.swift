@@ -11,12 +11,24 @@ import DNSProtocols
 import Foundation
 
 open class WKRCorePassStrength: WKRBlankPassStrength {
+    private let serviceFactory: ServiceFactoryProtocol
     public var minimunLength = 8
-    
+
     let regexOneUppercase = "^(?=.*[A-Z]).*$"
     let regexOneLowercase = "^(?=.*[a-z]).*$"
     let regexOneNumber = "^(?=.*[0-9]).*$"
     let regexOneSymbol = "^(?=.*[!@#$%&_]).*$"
+
+    // MARK: - Initialization
+    public init(serviceFactory: ServiceFactoryProtocol? = nil) {
+        self.serviceFactory = serviceFactory ?? ProductionServiceFactory()
+        super.init()
+    }
+
+    required public init() {
+        self.serviceFactory = ProductionServiceFactory()
+        super.init()
+    }
 
     // MARK: - Internal Work Methods
     override open func intDoCheckPassStrength(for password: String,
@@ -25,7 +37,7 @@ open class WKRCorePassStrength: WKRBlankPassStrength {
         var strength = 0
         
         if len > 0 { strength += 1 }
-        if len >= self.minimumLength { strength += 1 }
+        if len >= self.minimunLength { strength += 1 }
         if len >= 10 { strength += 1 }
 
         if self.utilityValidate(string: password, with: regexOneUppercase, caseSensitive: true) > 0 { strength += 1 }

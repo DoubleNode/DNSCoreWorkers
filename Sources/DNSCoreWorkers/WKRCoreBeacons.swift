@@ -6,7 +6,9 @@
 //  Copyright © 2025 - 2016 DoubleNode.com. All rights reserved.
 //
 
+#if !TESTING
 import CoreLocation
+#endif
 import DNSBlankWorkers
 import DNSCore
 import DNSCoreThreading
@@ -16,9 +18,32 @@ import Geodesy
 import UIKit
 
 open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate {
-    lazy var locationManager: CLLocationManager = utilityCreateLocationManager()
+    private let serviceFactory: ServiceFactoryProtocol
+    private var locationService: LocationServiceProtocol?
 
     var block: WKRPTCLGeoBlkStringLocation?
+
+    // MARK: - Initialization
+    public init(serviceFactory: ServiceFactoryProtocol? = nil) {
+        self.serviceFactory = serviceFactory ?? ProductionServiceFactory()
+        super.init()
+    }
+
+    required public init() {
+        self.serviceFactory = ProductionServiceFactory()
+        super.init()
+    }
+
+    // MARK: - Lazy Service Initialization
+    private var _locationService: LocationServiceProtocol {
+        if locationService == nil {
+            locationService = serviceFactory.makeLocationService()
+            locationService?.delegate = self
+            locationService?.desiredAccuracy = kCLLocationAccuracyBest
+            locationService?.allowsBackgroundLocationUpdates = false
+        }
+        return locationService!
+    }
 
     // MARK: - UIWindowSceneDelegate methods
     // Called when the scene has moved from an inactive state to an active state.
@@ -171,15 +196,6 @@ open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate {
  */
 
     // MARK: - Utility methods
-    private func utilityCreateLocationManager() -> CLLocationManager {
-        let retval = CLLocationManager()
-        retval.delegate = self
-        retval.desiredAccuracy = kCLLocationAccuracyBest
-        retval.allowsBackgroundLocationUpdates = false
-        retval.requestWhenInUseAuthorization()
-//        retval.requestAlwaysAuthorization()
-        return retval
-    }
 
     func utilityUpdateTracking() {
         /*

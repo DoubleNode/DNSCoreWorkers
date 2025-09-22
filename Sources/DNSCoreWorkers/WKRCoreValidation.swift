@@ -16,6 +16,19 @@ import Foundation
 open class WKRCoreValidation: WKRBlankValidation {
     public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrength()
 
+    private let serviceFactory: ServiceFactoryProtocol
+
+    // MARK: - Initialization
+    public init(serviceFactory: ServiceFactoryProtocol? = nil) {
+        self.serviceFactory = serviceFactory ?? ProductionServiceFactory()
+        super.init()
+    }
+
+    required public init() {
+        self.serviceFactory = ProductionServiceFactory()
+        super.init()
+    }
+
     // MARK: - Internal Work Methods
     override open func intDoValidateAddress(for address: DNSPostalAddress?,
                                             with config: Config.Address,
