@@ -60,7 +60,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return Publishers.Zip(future, nextWorker.doDeleteObject(for: id, with: progress))
             .map { _, _ in () }
             .eraseToAnyPublisher()
@@ -84,7 +84,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return future
             .catch({ _ in
                 nextWorker.doReadObject(for: id, with: progress)
@@ -110,7 +110,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return future
             .catch({ _ in
                 nextWorker.doReadString(for: id, with: progress)
@@ -138,7 +138,7 @@ open class WKRCoreKeychainCache: WKRBlankCache {
                 _ = resultBlock?(.error)
             }
         }
-        guard let nextWorker = self.nextWKRPTCLCache else { return future.eraseToAnyPublisher() }
+        guard let nextWorker = self.nextWorker else { return future.eraseToAnyPublisher() }
         return Publishers.Zip(future, nextWorker.doUpdate(object: object, for: id, with: progress))
             .map { _, _ in object }
             .eraseToAnyPublisher()

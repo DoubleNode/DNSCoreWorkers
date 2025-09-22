@@ -1,5 +1,5 @@
 {
-  "originHash" : "820fc73a4c27a3d23d143a206283cf6f47f2fee374919b98f8e194742f873077",
+  "originHash" : "3525dd9aa9717e4fbc8c49f90c74ad785e24b4c07123e5f97099d3b3793cd027",
   "pins" : [
     {
       "identity" : "activelabel.swift",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSBlankWorkers.git",
       "state" : {
-        "revision" : "3ca6e05793585912350433cb98eceac8fb1fa779",
-        "version" : "1.12.0"
+        "revision" : "6cdc6a44d6e5e0ce21c5a4f69a1babd8f8338dcd",
+        "version" : "1.12.1"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSDataContracts.git",
       "state" : {
-        "revision" : "5167d8a0671bd42a2913239ceb94da8cdc6aa684",
-        "version" : "1.12.0"
+        "revision" : "0edcf9a53a1a5dcb9fd6fbf7f07799ae66ce7ef7",
+        "version" : "1.12.1"
       }
     },
     {
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSProtocols.git",
       "state" : {
-        "revision" : "2f35d9265cefeb65d4d24a8099840611412bc0db",
-        "version" : "1.12.0"
+        "revision" : "7b779ea7761e77914926b1685ff93612387c46f1",
+        "version" : "1.12.1"
       }
     },
     {
