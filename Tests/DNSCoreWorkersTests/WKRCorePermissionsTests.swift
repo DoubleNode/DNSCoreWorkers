@@ -18,13 +18,13 @@ final class WKRCorePermissionsTests: XCTestCase {
     func test_initialization() {
         let worker = WKRCorePermissions(serviceFactory: TestServiceFactory())
         XCTAssertNotNil(worker)
-        XCTAssertTrue(worker is WKRBlankPermissions)
+        XCTAssertTrue(worker is WKRBasePermissions)
         XCTAssertTrue(worker is WKRPTCLPermissions)
     }
 
     func test_inheritance_hierarchy() {
         let worker = WKRCorePermissions(serviceFactory: TestServiceFactory())
-        XCTAssertTrue(worker is WKRBlankPermissions)
+        XCTAssertTrue(worker is WKRBasePermissions)
     }
 
     func test_protocol_conformance() {

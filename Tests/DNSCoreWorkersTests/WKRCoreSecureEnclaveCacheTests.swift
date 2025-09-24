@@ -42,7 +42,7 @@ final class WKRCoreSecureEnclaveCacheTests: XCTestCase {
 
     func test_inheritance_hierarchy() {
         XCTAssertTrue(sut is WKRCoreKeychainCache)
-        XCTAssertTrue(sut is WKRBlankCache)
+        XCTAssertTrue(sut is WKRBaseCache)
     }
 
     func test_protocol_conformance() {

@@ -14,7 +14,7 @@ import DNSProtocols
 import StoreKit
 #endif
 
-open class WKRCoreAppReview: WKRBlankAppReview {
+open class WKRCoreAppReview: WKRBaseAppReview {
     public var windowScene: UIWindowScene?
 
     private let serviceFactory: ServiceFactoryProtocol

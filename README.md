@@ -34,16 +34,16 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/DoubleNode/DNSCoreWorkers.git", from: "1.12.2")
+.package(url: "https://github.com/DoubleNode/DNSCoreWorkers.git", from: "1.12.3")
 ]
 ```
 
 ## Dependencies
 
 -   DNSAppCore v1.12.0+
--   DNSBlankWorkers v1.12.1+
+-   DNSBlankWorkers v1.12.3+
 -   DNSCore v1.12.1+
--   DNSCrashWorkers v1.12.0+
+-   DNSCrashWorkers v1.12.1+
 -   DNSError v1.12.0+
 -   DNSProtocols v1.12.1+
 -   DNSThemeObjects v1.12.0+

@@ -29,12 +29,12 @@ final class WKRCoreTestGeoTests: XCTestCase {
 
     func test_initialization() {
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankGeo)
+        XCTAssertTrue(sut is WKRBaseGeo)
         XCTAssertTrue(sut is WKRPTCLGeo)
     }
 
     func test_inheritance_hierarchy() {
-        XCTAssertTrue(sut is WKRBlankGeo)
+        XCTAssertTrue(sut is WKRBaseGeo)
     }
 
     func test_protocol_conformance() {

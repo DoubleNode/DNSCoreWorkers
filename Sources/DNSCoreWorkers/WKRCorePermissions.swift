@@ -24,7 +24,7 @@ import NotificationPermission
 #endif
 
 // swiftlint:disable:next type_body_length
-open class WKRCorePermissions: WKRBlankPermissions, PermissionsDataSource, PermissionsDelegate {
+open class WKRCorePermissions: WKRBasePermissions, PermissionsDataSource, PermissionsDelegate {
     private let serviceFactory: ServiceFactoryProtocol
     private var permissionService: PermissionServiceProtocol?
 

@@ -17,7 +17,7 @@ import DNSProtocols
 import Geodesy
 import UIKit
 
-open class WKRCoreBeacons: WKRBlankBeacons, CLLocationManagerDelegate {
+open class WKRCoreBeacons: WKRBaseBeacons, CLLocationManagerDelegate {
     private let serviceFactory: ServiceFactoryProtocol
     private var locationService: LocationServiceProtocol?
 

@@ -18,13 +18,13 @@ final class WKRCoreKeychainCacheTests: XCTestCase {
     func test_initialization() {
         let worker = WKRCoreKeychainCache(serviceFactory: TestServiceFactory())
         XCTAssertNotNil(worker)
-        XCTAssertTrue(worker is WKRBlankCache)
+        XCTAssertTrue(worker is WKRBaseCache)
         XCTAssertTrue(worker is WKRPTCLCache)
     }
 
     func test_inheritance_hierarchy() {
         let worker = WKRCoreKeychainCache(serviceFactory: TestServiceFactory())
-        XCTAssertTrue(worker is WKRBlankCache)
+        XCTAssertTrue(worker is WKRBaseCache)
     }
 
     func test_protocol_conformance() {

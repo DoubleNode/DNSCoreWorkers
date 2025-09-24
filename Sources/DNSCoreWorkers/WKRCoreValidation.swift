@@ -13,7 +13,7 @@ import DNSError
 import DNSProtocols
 import Foundation
 
-open class WKRCoreValidation: WKRBlankValidation {
+open class WKRCoreValidation: WKRBaseValidation {
     public var wkrPassStrength: WKRPTCLPassStrength = WKRCrashPassStrength()
 
     private let serviceFactory: ServiceFactoryProtocol

@@ -19,13 +19,13 @@ final class WKRCoreGeoTests: XCTestCase {
         // Test basic instantiation without triggering location services
         let worker = WKRCoreGeo(serviceFactory: TestServiceFactory())
         XCTAssertNotNil(worker)
-        XCTAssertTrue(worker is WKRBlankGeo)
+        XCTAssertTrue(worker is WKRBaseGeo)
         XCTAssertTrue(worker is WKRPTCLGeo)
     }
 
     func test_inheritance_hierarchy() {
         let worker = WKRCoreGeo(serviceFactory: TestServiceFactory())
-        XCTAssertTrue(worker is WKRBlankGeo)
+        XCTAssertTrue(worker is WKRBaseGeo)
     }
 
     func test_protocol_conformance() {

@@ -10,7 +10,7 @@ import DNSBlankWorkers
 import DNSProtocols
 import Foundation
 
-open class WKRCorePassStrength: WKRBlankPassStrength {
+open class WKRCorePassStrength: WKRBasePassStrength {
     private let serviceFactory: ServiceFactoryProtocol
     public var minimunLength = 8
 

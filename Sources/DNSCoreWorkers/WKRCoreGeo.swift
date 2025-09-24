@@ -19,7 +19,7 @@ import DNSProtocols
 import Geodesy
 import UIKit
 
-open class WKRCoreGeo: WKRBlankGeo, CLLocationManagerDelegate {
+open class WKRCoreGeo: WKRBaseGeo, CLLocationManagerDelegate {
     private let serviceFactory: ServiceFactoryProtocol
     private var locationService: LocationServiceProtocol?
 

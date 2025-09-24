@@ -1,5 +1,5 @@
 {
-  "originHash" : "3525dd9aa9717e4fbc8c49f90c74ad785e24b4c07123e5f97099d3b3793cd027",
+  "originHash" : "196a6c26b90218f1cab6e2dcf2264a907c8b8394443ae6ccf767edab97c42776",
   "pins" : [
     {
       "identity" : "activelabel.swift",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSBlankWorkers.git",
       "state" : {
-        "revision" : "6cdc6a44d6e5e0ce21c5a4f69a1babd8f8338dcd",
-        "version" : "1.12.1"
+        "revision" : "fdb032bee7bcd61b6965cf70f2a4a57ad7815ce3",
+        "version" : "1.12.3"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DoubleNode/DNSCrashWorkers.git",
       "state" : {
-        "revision" : "6c4a4d12ef62846619280fef93076d862589a7c4",
-        "version" : "1.12.0"
+        "revision" : "6e5f28216a21ef16296a4f67ab964fdabb7ffda7",
+        "version" : "1.12.1"
       }
     },
     {

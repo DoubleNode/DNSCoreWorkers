@@ -31,12 +31,12 @@ final class WKRCoreAppReviewTests: XCTestCase {
 
     func test_initialization() {
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankAppReview)
+        XCTAssertTrue(sut is WKRBaseAppReview)
         XCTAssertTrue(sut is WKRPTCLAppReview)
     }
 
     func test_inheritance_hierarchy() {
-        XCTAssertTrue(sut is WKRBlankAppReview)
+        XCTAssertTrue(sut is WKRBaseAppReview)
     }
 
     func test_protocol_conformance() {
@@ -192,7 +192,7 @@ final class WKRCoreAppReviewTests: XCTestCase {
     // MARK: - Property Access Tests
 
     func test_inherited_properties_accessible() {
-        // Test that inherited properties from WKRBlankAppReview are accessible
+        // Test that inherited properties from WKRBaseAppReview are accessible
         // These tests verify the worker pattern is properly implemented
 
         // Test that the worker has the expected structure

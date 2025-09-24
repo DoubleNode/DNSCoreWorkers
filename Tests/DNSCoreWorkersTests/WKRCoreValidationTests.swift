@@ -32,12 +32,12 @@ final class WKRCoreValidationTests: XCTestCase {
 
     func test_initialization() {
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankValidation)
+        XCTAssertTrue(sut is WKRBaseValidation)
         XCTAssertTrue(sut is WKRPTCLValidation)
     }
 
     func test_inheritance_hierarchy() {
-        XCTAssertTrue(sut is WKRBlankValidation)
+        XCTAssertTrue(sut is WKRBaseValidation)
     }
 
     func test_protocol_conformance() {

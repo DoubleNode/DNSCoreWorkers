@@ -29,12 +29,12 @@ final class WKRCorePassStrengthTests: XCTestCase {
 
     func test_initialization() {
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankPassStrength)
+        XCTAssertTrue(sut is WKRBasePassStrength)
         XCTAssertTrue(sut is WKRPTCLPassStrength)
     }
 
     func test_inheritance_hierarchy() {
-        XCTAssertTrue(sut is WKRBlankPassStrength)
+        XCTAssertTrue(sut is WKRBasePassStrength)
     }
 
     func test_protocol_conformance() {

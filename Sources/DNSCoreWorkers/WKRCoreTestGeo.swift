@@ -9,7 +9,7 @@
 import DNSBlankWorkers
 import DNSProtocols
 
-open class WKRCoreTestGeo: WKRBlankGeo {
+open class WKRCoreTestGeo: WKRBaseGeo {
     public var geohash = ""
 
     private let serviceFactory: ServiceFactoryProtocol

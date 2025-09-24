@@ -16,7 +16,7 @@ import Foundation
 import Valet
 #endif
 
-open class WKRCoreKeychainCache: WKRBlankCache {
+open class WKRCoreKeychainCache: WKRBaseCache {
     public enum C {
         public static let valetId = "WKRCoreKeychainCache"
     }

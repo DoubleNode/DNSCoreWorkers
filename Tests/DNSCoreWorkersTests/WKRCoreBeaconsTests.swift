@@ -33,13 +33,13 @@ final class WKRCoreBeaconsTests: XCTestCase {
 
     func test_initialization() {
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankBeacons)
+        XCTAssertTrue(sut is WKRBaseBeacons)
         XCTAssertTrue(sut is WKRPTCLBeacons)
         XCTAssertTrue(sut is CLLocationManagerDelegate)
     }
 
     func test_inheritance_hierarchy() {
-        XCTAssertTrue(sut is WKRBlankBeacons)
+        XCTAssertTrue(sut is WKRBaseBeacons)
     }
 
     func test_protocol_conformance() {
@@ -64,7 +64,7 @@ final class WKRCoreBeaconsTests: XCTestCase {
         // We can't directly access the service due to dependency injection,
         // but we can verify the worker initializes without errors
         XCTAssertNotNil(sut)
-        XCTAssertTrue(sut is WKRBlankBeacons)
+        XCTAssertTrue(sut is WKRBaseBeacons)
         XCTAssertTrue(sut is WKRPTCLBeacons)
         XCTAssertTrue(sut is CLLocationManagerDelegate)
     }
@@ -160,7 +160,7 @@ final class WKRCoreBeaconsTests: XCTestCase {
         let testWorker = WKRCoreBeacons(serviceFactory: TestServiceFactory())
         XCTAssertNotNil(testWorker)
         // Verify the worker can be initialized with custom service factory
-        XCTAssertTrue(testWorker is WKRBlankBeacons)
+        XCTAssertTrue(testWorker is WKRBaseBeacons)
         XCTAssertTrue(testWorker is WKRPTCLBeacons)
     }
 
